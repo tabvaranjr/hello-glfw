@@ -26,3 +26,6 @@
 *.exe
 *.out
 *.app
+
+# Directory for out-of-source builds
+build/
