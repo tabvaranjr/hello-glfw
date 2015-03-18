@@ -1,10 +1,12 @@
+# ----------------------------------------------------------------------------
 # Makefile for hello-glfw
-#
-# NOTE: This file is a bit less but nevertheless still UNIX-centric.
-   
+# ----------------------------------------------------------------------------
+
 cmake_minimum_required(VERSION 2.8)
 project(hello-glfw)
 
+# ----------------------------------------------------------------------------
+# Dependencies
 # ----------------------------------------------------------------------------
 
 # C++11 support is required
@@ -17,14 +19,15 @@ find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIR})
 
 # GLFW3
-find_package(PkgConfig REQUIRED)
-pkg_search_module(GLFW REQUIRED glfw3)
+find_package(glfw3 REQUIRED)
 include_directories(${GLFW_INCLUDE_DIRS})
 
 # GLEW
 find_package(GLEW REQUIRED)
 include_directories(${GLEW_INCLUDE_DIRS})
 
+# ----------------------------------------------------------------------------
+# Program
 # ----------------------------------------------------------------------------
 
 file(GLOB SRC "*.cpp")
