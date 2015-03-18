@@ -20,7 +20,7 @@ include_directories(${OPENGL_INCLUDE_DIR})
 
 # GLFW3
 find_package(glfw3 REQUIRED)
-include_directories(${GLFW_INCLUDE_DIRS})
+include_directories(${GLFW3_INCLUDE_DIR})
 
 # GLEW
 find_package(GLEW REQUIRED)
@@ -34,5 +34,5 @@ file(GLOB SRC "*.cpp")
 file(GLOB HDR "*.h")
 
 add_executable(hello-glfw ${SRC} ${HDR})
-target_link_libraries(hello-glfw ${GLEW_LIBRARIES} ${GLFW_LIBRARIES} ${OPENGL_gl_LIBRARY})
+target_link_libraries(hello-glfw ${GLEW_LIBRARIES} ${GLFW3_LIBRARY} ${OPENGL_gl_LIBRARY})
 
