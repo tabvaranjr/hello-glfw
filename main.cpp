@@ -15,6 +15,7 @@ static void glfwErrorCallback(int error, const char* description)
     std::cerr << "Error " << error << ": " << description << std::endl;
 }
 
+
 /// Callback for keys logged by GLFW
 static void glfwKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
@@ -23,6 +24,90 @@ static void glfwKeyCallback(GLFWwindow* window, int key, int scancode, int actio
         glfwSetWindowShouldClose(window, GL_TRUE);    
     }
 }
+
+
+/// Callback for mouse press/releases logged by GLFW
+static void glfwMouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+{
+    switch (button)
+    {
+    case GLFW_MOUSE_BUTTON_LEFT:
+        std::cout << "Left button";   
+        break;
+
+    case GLFW_MOUSE_BUTTON_MIDDLE:
+        std::cout << "Middle button";
+        break;
+
+    case GLFW_MOUSE_BUTTON_RIGHT:
+        std::cout << "Right button";
+        break;
+
+    default:
+        std::cout << "Button " << button;
+        break;
+    }
+
+   switch (action)
+    {
+    case GLFW_PRESS:
+        std::cout << " pressed";
+        break;    
+
+    case GLFW_RELEASE:
+        std::cout << " released";
+        break;
+    }
+
+    if (mods != 0)
+    {
+        std::cout << " with";
+
+        if (mods & GLFW_MOD_SHIFT)
+        {
+            std::cout << " SHIFT";
+        }
+        
+        if (mods & GLFW_MOD_CONTROL)
+        {
+            std::cout << " CTRL";
+        } 
+
+        if (mods & GLFW_MOD_ALT)
+        {
+            std::cout << " ALT";
+        }
+
+        if (mods & GLFW_MOD_SUPER)
+        {
+            std::cout << " SUPER";
+        }    
+    }
+    
+    std::cout << std::endl;
+}
+
+
+/// Callback when the window is minimized/iconified
+static void glfwWindowIconifyCallback(GLFWwindow* window, int iconified)
+{
+    if (iconified)
+    {
+        std::cout << "Window was minimized." << std::endl;
+    }
+    else
+    {
+        std::cout << "Window was restored." << std::endl;
+    }
+}
+
+
+/// Callback when the size of the window is changed
+static void glfwWindowSizeCallback(GLFWwindow* window, int width, int height)
+{
+    std::cout << "Window size changed to: " << width << "x" << height << std::endl;
+}
+
 
 /// Program entry point
 int main(int argc, char* argv[])
@@ -44,7 +129,7 @@ int main(int argc, char* argv[])
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1);    
 
-    // Reminder: GLEw requires an OpenGL context before initialization.
+    // Reminder: GLEW requires a valid OpenGL context before initialization.
     GLenum err = glewInit();
     if (err != GLEW_OK)
     {
@@ -56,8 +141,13 @@ int main(int argc, char* argv[])
     std::cout << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
     std::cout << "Version: " << glGetString(GL_VERSION)  << std::endl;
 
+    // Set callbacks for feedback.
     glfwSetKeyCallback(window, glfwKeyCallback);
+    glfwSetMouseButtonCallback(window, glfwMouseButtonCallback);
+    glfwSetWindowIconifyCallback(window, glfwWindowIconifyCallback);
+    glfwSetWindowSizeCallback(window, glfwWindowSizeCallback);
 
+    // Main loop
     while (!glfwWindowShouldClose(window))
     {
 
