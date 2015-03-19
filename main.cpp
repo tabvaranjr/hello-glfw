@@ -189,14 +189,40 @@ int main(int argc, char* argv[])
     glBindBuffer(GL_ARRAY_BUFFER, triangleVbo);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
     
-    std::string&& vertexShader = readTextFile("hello.vs");
-    std::string&& geometryShader = readTextFile("hello.gs");
-    std::string&& fragmentShader = readTextFile("hello.fs");
+    // Create the shader stage objects.
+    std::string&& vertexShaderFile = readTextFile("hello.vs");
+    auto vertexShaderFilePtr = vertexShaderFile.c_str();
+    GLuint triangleVs = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(triangleVs, 1, &vertexShaderFilePtr, nullptr);
+    glCompileShader(triangleVs);
+
+    std::string&& geometryShaderFile = readTextFile("hello.gs");
+    auto geometryShaderFilePtr = geometryShaderFile.c_str();
+    GLuint triangleGs = glCreateShader(GL_GEOMETRY_SHADER);
+    glShaderSource(triangleGs, 1, &geometryShaderFilePtr, nullptr);
+    glCompileShader(triangleGs);
+
+    std::string&& fragmentShaderFile = readTextFile("hello.fs");
+    auto fragmentShaderFilePtr = fragmentShaderFile.c_str();
+    GLuint triangleFs = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(triangleFs, 1, &fragmentShaderFilePtr, nullptr);
+    glCompileShader(triangleFs);
+
+    // Create the shader program object.
+    GLuint sp = glCreateProgram();
+    glAttachShader(sp, triangleVs);
+    glAttachShader(sp, triangleGs);
+    glAttachShader(sp, triangleFs);
+    glLinkProgram(sp);
 
     // Main loop
     while (!glfwWindowShouldClose(window))
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        glUseProgram(sp);
+        glBindVertexArray(triangleVao);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
     
         glfwSwapBuffers(window);
         glfwPollEvents();
