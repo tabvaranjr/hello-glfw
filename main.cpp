@@ -190,19 +190,19 @@ int main(int argc, char* argv[])
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
     
     // Create the shader stage objects.
-    std::string&& vertexShaderFile = readTextFile("hello.vs");
+    std::string&& vertexShaderFile = readTextFile("hello.vs.glsl");
     auto vertexShaderFilePtr = vertexShaderFile.c_str();
     GLuint triangleVs = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(triangleVs, 1, &vertexShaderFilePtr, nullptr);
     glCompileShader(triangleVs);
 
-    std::string&& geometryShaderFile = readTextFile("hello.gs");
+    std::string&& geometryShaderFile = readTextFile("hello.gs.glsl");
     auto geometryShaderFilePtr = geometryShaderFile.c_str();
     GLuint triangleGs = glCreateShader(GL_GEOMETRY_SHADER);
     glShaderSource(triangleGs, 1, &geometryShaderFilePtr, nullptr);
     glCompileShader(triangleGs);
 
-    std::string&& fragmentShaderFile = readTextFile("hello.fs");
+    std::string&& fragmentShaderFile = readTextFile("hello.fs.glsl");
     auto fragmentShaderFilePtr = fragmentShaderFile.c_str();
     GLuint triangleFs = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(triangleFs, 1, &fragmentShaderFilePtr, nullptr);
