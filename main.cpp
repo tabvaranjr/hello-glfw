@@ -7,6 +7,8 @@
 #include <GLFW/glfw3.h>
 
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <cstdlib>
 
 /// Callback for errors logged by GLFW
@@ -109,6 +111,23 @@ static void glfwWindowSizeCallback(GLFWwindow* window, int width, int height)
 }
 
 
+/// Reads a text file into a string
+std::string readTextFile(const std::string& filename)
+{
+    std::ifstream ifs(filename.c_str());
+    if (ifs)
+    {
+        std::stringstream sstr;
+        sstr << ifs.rdbuf();
+        return sstr.str();
+    }
+    else
+    {
+        return std::string();
+    }
+}
+
+
 /// Program entry point
 int main(int argc, char* argv[])
 {
@@ -147,14 +166,14 @@ int main(int argc, char* argv[])
     glfwSetWindowIconifyCallback(window, glfwWindowIconifyCallback);
     glfwSetWindowSizeCallback(window, glfwWindowSizeCallback);
 
-    glEnable(DEPTH_TEST);
+    glEnable(GL_DEPTH_TEST);
 
     GLfloat triangleVertices[] = 
     {
         0.75f, 0.75f, 0.0f,
         -0.75f, 0.75f, 0.0f,
         0.0f, -0.75f, 0.0f
-    }
+    };
 
     // Create a VBO for the triangle.
     GLuint triangleVbo;
@@ -170,6 +189,10 @@ int main(int argc, char* argv[])
     glBindBuffer(GL_ARRAY_BUFFER, triangleVbo);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
     
+    std::string&& vertexShader = readTextFile("hello.vs");
+    std::string&& geometryShader = readTextFile("hello.gs");
+    std::string&& fragmentShader = readTextFile("hello.fs");
+
     // Main loop
     while (!glfwWindowShouldClose(window))
     {
