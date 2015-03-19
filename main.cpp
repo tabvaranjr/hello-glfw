@@ -147,10 +147,33 @@ int main(int argc, char* argv[])
     glfwSetWindowIconifyCallback(window, glfwWindowIconifyCallback);
     glfwSetWindowSizeCallback(window, glfwWindowSizeCallback);
 
+    glEnable(DEPTH_TEST);
+
+    GLfloat triangleVertices[] = 
+    {
+        0.75f, 0.75f, 0.0f,
+        -0.75f, 0.75f, 0.0f,
+        0.0f, -0.75f, 0.0f
+    }
+
+    // Create a VBO for the triangle.
+    GLuint triangleVbo;
+    glGenBuffers(1, &triangleVbo);
+    glBindBuffer(GL_ARRAY_BUFFER, triangleVbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(triangleVertices), triangleVertices, GL_STATIC_DRAW);
+
+    // Create a VAO for the triangle.
+    GLuint triangleVao;
+    glGenVertexArrays(1, &triangleVao);
+    glBindVertexArray(triangleVao);
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, triangleVbo);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    
     // Main loop
     while (!glfwWindowShouldClose(window))
     {
-
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
         glfwSwapBuffers(window);
         glfwPollEvents();
