@@ -39,3 +39,5 @@ file(GLOB HDR "*.h")
 add_executable(hello-glfw ${SRC} ${HDR})
 target_link_libraries(hello-glfw ${GLEW_LIBRARIES} ${GLFW3_LIBRARY} ${OPENGL_gl_LIBRARY})
 
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/shaders DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+
