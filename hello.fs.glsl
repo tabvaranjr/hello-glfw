@@ -1,6 +1,6 @@
 #version 150
 
-layout(location = 0) out vec4 fragcolor;
+out vec4 fragcolor;
 
 void main()
 {
