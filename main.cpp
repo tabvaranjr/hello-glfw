@@ -120,11 +120,13 @@ std::string readTextFile(const std::string& filename)
     {
         std::stringstream sstr;
         sstr << ifs.rdbuf();
+        ifs.close();
         return sstr.str();
     }
     else
     {
-        return std::string();
+        std::cerr << "Failed to read " << filename << std::endl;
+        return "";
     }
 }
 
