@@ -3,6 +3,7 @@
 /// \author Patrick Clément-Bonhomme <patrick.cb@gmail.com>
 ///
 
+#define GLEW_STATIC
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
