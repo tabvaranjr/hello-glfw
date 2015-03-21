@@ -192,21 +192,21 @@ GLuint createTriangle()
 
 
 /// Create the shader program.
-GLuint createShaderProgram()
+GLuint createShaderProgram(const std::string& program)
 {
-    std::string&& vertexShaderFile = readTextFile("shaders/hello.vs.glsl");
+    std::string&& vertexShaderFile = readTextFile("shaders/" + program + ".vert");
     auto vertexShaderFilePtr = vertexShaderFile.c_str();
     GLuint triangleVs = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(triangleVs, 1, &vertexShaderFilePtr, nullptr);
     glCompileShader(triangleVs);
 
-    std::string&& geometryShaderFile = readTextFile("shaders/hello.gs.glsl");
+    std::string&& geometryShaderFile = readTextFile("shaders/" + program + ".geom");
     auto geometryShaderFilePtr = geometryShaderFile.c_str();
     GLuint triangleGs = glCreateShader(GL_GEOMETRY_SHADER);
     glShaderSource(triangleGs, 1, &geometryShaderFilePtr, nullptr);
     glCompileShader(triangleGs);
 
-    std::string&& fragmentShaderFile = readTextFile("shaders/hello.fs.glsl");
+    std::string&& fragmentShaderFile = readTextFile("shaders/" + program + ".frag");
     auto fragmentShaderFilePtr = fragmentShaderFile.c_str();
     GLuint triangleFs = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(triangleFs, 1, &fragmentShaderFilePtr, nullptr);
@@ -270,7 +270,7 @@ int main(int argc, char* argv[])
 
     // Create resources.
     GLuint vao = createTriangle();
-    GLuint sp = createShaderProgram();
+    GLuint sp = createShaderProgram("simple");
 
     // Main loop
     while (!glfwWindowShouldClose(window))
