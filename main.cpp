@@ -109,6 +109,8 @@ static void glfwWindowIconifyCallback(GLFWwindow* window, int iconified)
 static void glfwWindowSizeCallback(GLFWwindow* window, int width, int height)
 {
     std::cout << "Window size changed to: " << width << "x" << height << std::endl;
+
+    glViewport(0, 0, width, height);
 }
 
 
