@@ -1,6 +1,7 @@
 #version 150
 
 in vec3 color;
+in vec3 normal;
 
 out vec4 fragcolor;
 
