@@ -133,46 +133,9 @@ std::string readTextFile(const std::string& filename)
 }
 
 
-/// Program entry point
-int main(int argc, char* argv[])
+/// Create a triangle.
+GLuint createTriangle()
 {
-    glfwSetErrorCallback(glfwErrorCallback);
-
-    if (!glfwInit())
-    {
-        std::cerr << "Failed to initialize GLFW." << std::endl;
-        return EXIT_FAILURE;
-    }
-
-    GLFWwindow* window = glfwCreateWindow(640, 480, "Hello GLFW3", nullptr, nullptr);
-    if (window == nullptr)
-    {
-        glfwTerminate();
-    }
-
-    glfwMakeContextCurrent(window);
-    glfwSwapInterval(1);    
-
-    // Reminder: GLEW requires a valid OpenGL context before initialization.
-    GLenum err = glewInit();
-    if (err != GLEW_OK)
-    {
-        std::cerr << "Failed to initialize GLEW: " << glewGetErrorString(err) << std::endl;
-        return EXIT_FAILURE;
-    }
-
-    std::cout << "Vendor: " << glGetString(GL_VENDOR) << std::endl;
-    std::cout << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
-    std::cout << "Version: " << glGetString(GL_VERSION)  << std::endl;
-
-    // Set callbacks for feedback.
-    glfwSetKeyCallback(window, glfwKeyCallback);
-    glfwSetMouseButtonCallback(window, glfwMouseButtonCallback);
-    glfwSetWindowIconifyCallback(window, glfwWindowIconifyCallback);
-    glfwSetWindowSizeCallback(window, glfwWindowSizeCallback);
-
-    glEnable(GL_DEPTH_TEST);
-
     GLfloat triangleVertices[] = 
     {
         0.75f, 0.75f, 0.0f,
@@ -224,7 +187,13 @@ int main(int argc, char* argv[])
     glBindBuffer(GL_ARRAY_BUFFER, triangleVbo[2]);
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 
-    // Create the shader stage objects.
+    return triangleVao;
+}
+
+
+/// Create the shader program.
+GLuint createShaderProgram()
+{
     std::string&& vertexShaderFile = readTextFile("shaders/hello.vs.glsl");
     auto vertexShaderFilePtr = vertexShaderFile.c_str();
     GLuint triangleVs = glCreateShader(GL_VERTEX_SHADER);
@@ -255,13 +224,61 @@ int main(int argc, char* argv[])
 
     glLinkProgram(sp);
 
+    return sp;
+}
+
+
+/// Program entry point
+int main(int argc, char* argv[])
+{
+    glfwSetErrorCallback(glfwErrorCallback);
+
+    if (!glfwInit())
+    {
+        std::cerr << "Failed to initialize GLFW." << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    GLFWwindow* window = glfwCreateWindow(640, 480, "Hello GLFW3", nullptr, nullptr);
+    if (window == nullptr)
+    {
+        glfwTerminate();
+    }
+
+    glfwMakeContextCurrent(window);
+    glfwSwapInterval(1);    
+
+    // Reminder: GLEW requires a valid OpenGL context before initialization.
+    GLenum err = glewInit();
+    if (err != GLEW_OK)
+    {
+        std::cerr << "Failed to initialize GLEW: " << glewGetErrorString(err) << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    std::cout << "Vendor: " << glGetString(GL_VENDOR) << std::endl;
+    std::cout << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
+    std::cout << "Version: " << glGetString(GL_VERSION)  << std::endl;
+
+    glEnable(GL_DEPTH_TEST);
+
+    // Set callbacks for feedback.
+    glfwSetKeyCallback(window, glfwKeyCallback);
+    glfwSetMouseButtonCallback(window, glfwMouseButtonCallback);
+    glfwSetWindowIconifyCallback(window, glfwWindowIconifyCallback);
+    glfwSetWindowSizeCallback(window, glfwWindowSizeCallback);
+
+    // Create resources.
+    GLuint vao = createTriangle();
+    GLuint sp = createShaderProgram();
+
     // Main loop
     while (!glfwWindowShouldClose(window))
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glUseProgram(sp);
-        glBindVertexArray(triangleVao);
+        glBindVertexArray(vao);
         glDrawArrays(GL_TRIANGLES, 0, 3);
     
         glfwSwapBuffers(window);
