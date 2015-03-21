@@ -180,19 +180,35 @@ int main(int argc, char* argv[])
         0.0f, -0.75f, 0.0f
     };
 
+    GLfloat triangleColors[] =
+    {
+        1.0f, 0.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,
+        0.0f, 0.0f, 1.0f
+    };
+
     // Create a VBO for the triangle.
-    GLuint triangleVbo;
-    glGenBuffers(1, &triangleVbo);
-    glBindBuffer(GL_ARRAY_BUFFER, triangleVbo);
+    GLuint triangleVbo[2];
+    glGenBuffers(2, triangleVbo);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, triangleVbo[0]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(triangleVertices), triangleVertices, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ARRAY_BUFFER, triangleVbo[1]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(triangleColors), triangleColors, GL_STATIC_DRAW);
 
     // Create a VAO for the triangle.
     GLuint triangleVao;
     glGenVertexArrays(1, &triangleVao);
     glBindVertexArray(triangleVao);
+   
     glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, triangleVbo);
+    glBindBuffer(GL_ARRAY_BUFFER, triangleVbo[0]);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    
+    glEnableVertexAttribArray(1);
+    glBindBuffer(GL_ARRAY_BUFFER, triangleVbo[1]);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
     
     // Create the shader stage objects.
     std::string&& vertexShaderFile = readTextFile("shaders/hello.vs.glsl");
@@ -218,6 +234,10 @@ int main(int argc, char* argv[])
     glAttachShader(sp, triangleVs);
     glAttachShader(sp, triangleGs);
     glAttachShader(sp, triangleFs);
+
+    glBindAttribLocation(sp, 0, "pos");
+    glBindAttribLocation(sp, 1, "color");
+
     glLinkProgram(sp);
 
     // Main loop
