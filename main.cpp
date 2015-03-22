@@ -13,6 +13,9 @@
 #include <cstdlib>
 #include <boost/format.hpp>
 
+/// Activates KHR_debug extension in OpenGL.
+static bool IsDebugEnabled = false;
+
 
 /// Callback for errors logged by GLFW
 static void glfwErrorCallback(int error, const char* description)
@@ -136,6 +139,13 @@ static void glfwWindowSizeCallback(GLFWwindow* window, int width, int height)
 }
 
 
+/// Callback when an
+static void glDebugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, void* userParam)
+{
+    std::cerr << boost::format("Error %1%: %2%") % id % message << std::endl;
+}
+
+
 /// Reads a text file into a string
 std::string readTextFile(const std::string& filename)
 {
@@ -252,15 +262,36 @@ GLuint createShaderProgram(const std::string& program)
 }
 
 
+/// Parses the command line
+void parseCommandLine(int argc, char* argv[])
+{
+    for (int i = 0; i < argc; ++i)
+    {
+        if (std::string(argv[i]) == "-d") 
+        {
+            std::cout << "Debug mode is enabled." << std::endl;            
+            IsDebugEnabled = true;
+        }    
+    }
+}
+
+
 /// Program entry point
 int main(int argc, char* argv[])
 {
+    parseCommandLine(argc, argv);
+
     glfwSetErrorCallback(glfwErrorCallback);
 
     if (!glfwInit())
     {
         std::cerr << "Failed to initialize GLFW." << std::endl;
         return EXIT_FAILURE;
+    }
+
+    if (IsDebugEnabled)
+    {
+        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_FALSE);
     }
 
     GLFWwindow* window = glfwCreateWindow(640, 480, "Hello GLFW3", nullptr, nullptr);
@@ -280,11 +311,22 @@ int main(int argc, char* argv[])
         return EXIT_FAILURE;
     }
 
+    if (IsDebugEnabled)
+    {
+        if (GLEW_KHR_debug)
+        {
+            glDebugMessageCallback(glDebugCallback, nullptr);
+            glEnable(GL_DEBUG_OUTPUT);
+        }
+        else
+        {
+            std::cerr << "Missing KHR_debug extension support for debug output." << std::endl;
+        }
+    }
+
     std::cout << boost::format("Vendor: %1%") % glGetString(GL_VENDOR) << std::endl;
     std::cout << boost::format("Renderer: %1%") % glGetString(GL_RENDERER) << std::endl;
     std::cout << boost::format("Version: %1%") % glGetString(GL_VERSION)  << std::endl;
-
-    glEnable(GL_DEPTH_TEST);
 
     // Set callbacks for feedback.
     glfwSetKeyCallback(window, glfwKeyCallback);
@@ -292,9 +334,12 @@ int main(int argc, char* argv[])
     glfwSetWindowIconifyCallback(window, glfwWindowIconifyCallback);
     glfwSetWindowSizeCallback(window, glfwWindowSizeCallback);
 
+
     // Create resources.
     GLuint vao = createTriangle();
     GLuint sp = createShaderProgram("simple");
+
+    //glEnable(GL_DEPTH_TEST);
 
     // Main loop
     while (!glfwWindowShouldClose(window))
