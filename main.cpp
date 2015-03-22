@@ -11,11 +11,13 @@
 #include <fstream>
 #include <sstream>
 #include <cstdlib>
+#include <boost/format.hpp>
+
 
 /// Callback for errors logged by GLFW
 static void glfwErrorCallback(int error, const char* description)
 {
-    std::cerr << "Error " << error << ": " << description << std::endl;
+    std::cerr << boost::format("Error %1%: %2%") % error % description << std::endl;
 }
 
 
@@ -31,63 +33,83 @@ static void glfwKeyCallback(GLFWwindow* window, int key, int scancode, int actio
 
 /// Callback for mouse press/releases logged by GLFW
 static void glfwMouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
-{
+{        
+    std::string buttonStr;         
     switch (button)
     {
     case GLFW_MOUSE_BUTTON_LEFT:
-        std::cout << "Left button";   
+        buttonStr = "Left button";   
         break;
 
     case GLFW_MOUSE_BUTTON_MIDDLE:
-        std::cout << "Middle button";
+        buttonStr = "Middle button";
         break;
 
     case GLFW_MOUSE_BUTTON_RIGHT:
-        std::cout << "Right button";
+        buttonStr = "Right button";
         break;
 
     default:
-        std::cout << "Button " << button;
+        buttonStr = (boost::format("Button %1%") % button).str();
         break;
     }
 
-   switch (action)
+    std::string actionStr;    
+    switch (action)
     {
     case GLFW_PRESS:
-        std::cout << " pressed";
+        actionStr = "pressed";
         break;    
 
     case GLFW_RELEASE:
-        std::cout << " released";
+        actionStr = "released";
         break;
     }
 
+    std::string modsStr;
     if (mods != 0)
     {
-        std::cout << " with";
-
         if (mods & GLFW_MOD_SHIFT)
         {
-            std::cout << " SHIFT";
+            modsStr += "SHIFT";
         }
         
         if (mods & GLFW_MOD_CONTROL)
         {
-            std::cout << " CTRL";
+            if (!modsStr.empty())
+            {
+                modsStr += "+";
+            }
+
+            modsStr += "CTRL";
         } 
 
         if (mods & GLFW_MOD_ALT)
         {
-            std::cout << " ALT";
+            if (!modsStr.empty())
+            {
+                modsStr += "+";
+            }
+
+            modsStr += "ALT";
         }
 
         if (mods & GLFW_MOD_SUPER)
         {
-            std::cout << " SUPER";
+            if (!modsStr.empty())
+            {
+                modsStr += "+";
+            }
+
+            modsStr += "SUPER";
         }    
     }
+    else
+    {
+        modsStr = "None";    
+    }
     
-    std::cout << std::endl;
+    std::cout << boost::format("%1% %2% with %3% modifier keys") % buttonStr % actionStr % modsStr << std::endl;
 }
 
 
@@ -108,7 +130,7 @@ static void glfwWindowIconifyCallback(GLFWwindow* window, int iconified)
 /// Callback when the size of the window is changed
 static void glfwWindowSizeCallback(GLFWwindow* window, int width, int height)
 {
-    std::cout << "Window size changed to: " << width << "x" << height << std::endl;
+    std::cout << boost::format("Window size changed to %1% x %2%") % width % height << std::endl;
 
     glViewport(0, 0, width, height);
 }
@@ -127,7 +149,7 @@ std::string readTextFile(const std::string& filename)
     }
     else
     {
-        std::cerr << "Failed to read " << filename << std::endl;
+        std::cerr << boost::format("Failed to open %1% for reading.") % filename << std::endl;
         return "";
     }
 }
@@ -194,19 +216,21 @@ GLuint createTriangle()
 /// Create the shader program.
 GLuint createShaderProgram(const std::string& program)
 {
-    std::string&& vertexShaderFile = readTextFile("shaders/" + program + ".vert");
+    boost::format file("shaders/%1%.%2%");
+
+    std::string&& vertexShaderFile = readTextFile((file % program % "vert").str());
     auto vertexShaderFilePtr = vertexShaderFile.c_str();
     GLuint triangleVs = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(triangleVs, 1, &vertexShaderFilePtr, nullptr);
     glCompileShader(triangleVs);
 
-    std::string&& geometryShaderFile = readTextFile("shaders/" + program + ".geom");
+    std::string&& geometryShaderFile = readTextFile((file % program % "geom").str());
     auto geometryShaderFilePtr = geometryShaderFile.c_str();
     GLuint triangleGs = glCreateShader(GL_GEOMETRY_SHADER);
     glShaderSource(triangleGs, 1, &geometryShaderFilePtr, nullptr);
     glCompileShader(triangleGs);
 
-    std::string&& fragmentShaderFile = readTextFile("shaders/" + program + ".frag");
+    std::string&& fragmentShaderFile = readTextFile((file % program % "frag").str());
     auto fragmentShaderFilePtr = fragmentShaderFile.c_str();
     GLuint triangleFs = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(triangleFs, 1, &fragmentShaderFilePtr, nullptr);
@@ -252,13 +276,13 @@ int main(int argc, char* argv[])
     GLenum err = glewInit();
     if (err != GLEW_OK)
     {
-        std::cerr << "Failed to initialize GLEW: " << glewGetErrorString(err) << std::endl;
+        std::cerr << boost::format("Failed to initialize GLEW: %1%") % glewGetErrorString(err) << std::endl;
         return EXIT_FAILURE;
     }
 
-    std::cout << "Vendor: " << glGetString(GL_VENDOR) << std::endl;
-    std::cout << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
-    std::cout << "Version: " << glGetString(GL_VERSION)  << std::endl;
+    std::cout << boost::format("Vendor: %1%") % glGetString(GL_VENDOR) << std::endl;
+    std::cout << boost::format("Renderer: %1%") % glGetString(GL_RENDERER) << std::endl;
+    std::cout << boost::format("Version: %1%") % glGetString(GL_VERSION)  << std::endl;
 
     glEnable(GL_DEPTH_TEST);
 

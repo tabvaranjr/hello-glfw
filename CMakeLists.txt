@@ -29,6 +29,10 @@ include_directories(${GLFW3_INCLUDE_DIR})
 find_package(GLEW REQUIRED)
 include_directories(${GLEW_INCLUDE_DIRS})
 
+# Boost C++ Libraries
+find_package(Boost REQUIRED)
+include_directories(${Boost_INCLUDE_DIR})
+
 # ----------------------------------------------------------------------------
 # Program
 # ----------------------------------------------------------------------------
