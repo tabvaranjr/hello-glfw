@@ -139,7 +139,7 @@ static void glfwWindowSizeCallback(GLFWwindow* window, int width, int height)
 }
 
 
-/// Callback when an
+/// Callback when an debug message is sent by OpenGL (with KHR_debug extension/OpenGL 4.3)
 static void glDebugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, void* userParam)
 {
     std::cerr << boost::format("Error %1%: %2%") % id % message << std::endl;
@@ -291,7 +291,7 @@ int main(int argc, char* argv[])
 
     if (IsDebugEnabled)
     {
-        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_FALSE);
+        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
     }
 
     GLFWwindow* window = glfwCreateWindow(640, 480, "Hello GLFW3", nullptr, nullptr);
@@ -313,7 +313,7 @@ int main(int argc, char* argv[])
 
     if (IsDebugEnabled)
     {
-        if (GLEW_KHR_debug)
+        if (GLEW_VERSION_4_3 || GLEW_KHR_debug)
         {
             glDebugMessageCallback(glDebugCallback, nullptr);
             glEnable(GL_DEBUG_OUTPUT);
