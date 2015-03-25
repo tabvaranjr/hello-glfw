@@ -1,5 +1,9 @@
 #version 150
 
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 proj;
+
 in vec3 pos;
 in vec3 color;
 in vec3 normal;
@@ -12,6 +16,6 @@ void main()
     vertex_color = color;
     vertex_normal = normal;
 
-    gl_Position = vec4(pos, 1.0);
+    gl_Position = proj * model * view * vec4(pos, 1.0);
 }
 

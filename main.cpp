@@ -362,7 +362,37 @@ int main(int argc, char* argv[])
     GLuint vao = createTriangle();
     GLuint sp = createShaderProgram("simple");
 
+    // Set camera matrices.
+    auto model_location = glGetUniformLocation(sp, "model");
+    auto view_location = glGetUniformLocation(sp, "view");
+    auto proj_location = glGetUniformLocation(sp, "proj");
+
+    GLfloat model[] = 
+    { 
+        1.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, 1.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 1.0f, 0.0f,
+        0.0f, 0.0f, 0.0f, 1.0f
+    };
+
+    GLfloat view[] = 
+    { 
+        1.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, 1.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 1.0f, 0.0f,
+        0.0f, 0.0f, 0.0f, 1.0f
+    };
+
+    GLfloat proj[] = 
+    { 
+        1.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, 1.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 1.0f, 0.0f,
+        0.0f, 0.0f, 0.0f, 1.0f
+    };
+
     glEnable(GL_DEPTH_TEST);
+    glClearColor(0.05f, 0.05f, 0.05f, 1.0);
 
     // Main loop
     while (!glfwWindowShouldClose(window))
@@ -370,6 +400,11 @@ int main(int argc, char* argv[])
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glUseProgram(sp);
+        
+        glUniformMatrix4fv(model_location, 1, GL_FALSE, model);
+        glUniformMatrix4fv(view_location, 1, GL_FALSE, view);
+        glUniformMatrix4fv(proj_location, 1, GL_FALSE, proj);
+        
         glBindVertexArray(vao);
         glDrawArrays(GL_TRIANGLES, 0, 3);
     
