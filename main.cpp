@@ -12,6 +12,7 @@
 #include <sstream>
 #include <cstdlib>
 #include <boost/format.hpp>
+#include <cmath>
 
 /// Activates KHR_debug extension in OpenGL.
 static bool IsDebugEnabled = false;
@@ -170,9 +171,9 @@ GLuint createTriangle()
 {
     GLfloat triangleVertices[] = 
     {
-        0.75f, 0.75f, 0.0f,
-        -0.75f, 0.75f, 0.0f,
-        0.0f, -0.75f, 0.0f
+        0.5f, 0.5f, 0.0f,
+        -0.5f, 0.5f, 0.0f,
+        0.0f, -0.5f, 0.0f
     };
 
     GLfloat triangleColors[] =
@@ -400,6 +401,12 @@ int main(int argc, char* argv[])
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glUseProgram(sp);
+        
+        float time = static_cast<float>(glfwGetTime());
+        view[0] = cos(time);
+        view[1] = -sin(time);
+        view[4] = sin(time);
+        view[5] = cos(time);
         
         glUniformMatrix4fv(model_location, 1, GL_FALSE, model);
         glUniformMatrix4fv(view_location, 1, GL_FALSE, view);
