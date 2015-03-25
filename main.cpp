@@ -293,7 +293,7 @@ GLFWwindow* makeContext()
         glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
     }
 
-    auto window = glfwCreateWindow(640, 480, "Hello GLFW3", nullptr, nullptr);
+    auto window = glfwCreateWindow(800, 800, "Hello GLFW3", nullptr, nullptr);
     if (window == nullptr)
     {
         glfwTerminate();
