@@ -276,17 +276,15 @@ void parseCommandLine(int argc, char* argv[])
 }
 
 
-/// Program entry point
-int main(int argc, char* argv[])
+/// Makes an OpenGL context with a window
+GLFWwindow* makeContext()
 {
-    parseCommandLine(argc, argv);
-
     glfwSetErrorCallback(glfwErrorCallback);
 
     if (!glfwInit())
     {
         std::cerr << "Failed to initialize GLFW." << std::endl;
-        return EXIT_FAILURE;
+        return nullptr;
     }
 
     if (IsDebugEnabled)
@@ -294,10 +292,11 @@ int main(int argc, char* argv[])
         glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
     }
 
-    GLFWwindow* window = glfwCreateWindow(640, 480, "Hello GLFW3", nullptr, nullptr);
+    auto window = glfwCreateWindow(640, 480, "Hello GLFW3", nullptr, nullptr);
     if (window == nullptr)
     {
         glfwTerminate();
+        return nullptr;
     }
 
     glfwMakeContextCurrent(window);
@@ -308,7 +307,9 @@ int main(int argc, char* argv[])
     if (err != GLEW_OK)
     {
         std::cerr << boost::format("Failed to initialize GLEW: %1%") % glewGetErrorString(err) << std::endl;
-        return EXIT_FAILURE;
+
+        glfwTerminate();
+        return nullptr;
     }
 
     if (IsDebugEnabled)
@@ -334,12 +335,34 @@ int main(int argc, char* argv[])
     glfwSetWindowIconifyCallback(window, glfwWindowIconifyCallback);
     glfwSetWindowSizeCallback(window, glfwWindowSizeCallback);
 
+    return window;
+}
+
+
+/// Destroys the window and the OpenGL context
+void destroyContext(GLFWwindow* window)
+{
+    glfwDestroyWindow(window);
+    glfwTerminate();
+}
+
+
+/// Program entry point
+int main(int argc, char* argv[])
+{
+    parseCommandLine(argc, argv);
+
+    auto window = makeContext();
+    if (window == nullptr)
+    {
+        return EXIT_FAILURE;
+    }
 
     // Create resources.
     GLuint vao = createTriangle();
     GLuint sp = createShaderProgram("simple");
 
-    //glEnable(GL_DEPTH_TEST);
+    glEnable(GL_DEPTH_TEST);
 
     // Main loop
     while (!glfwWindowShouldClose(window))
@@ -354,8 +377,7 @@ int main(int argc, char* argv[])
         glfwPollEvents();
     }
 
-    glfwDestroyWindow(window);
-    glfwTerminate();
+    destroyContext(window);
 
     return EXIT_SUCCESS;
 }
