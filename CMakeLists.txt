@@ -37,8 +37,8 @@ include_directories(${Boost_INCLUDE_DIR})
 # Program
 # ----------------------------------------------------------------------------
 
-file(GLOB SRC "*.cpp")
-file(GLOB HDR "*.h")
+file(GLOB SRC "src/*.cpp")
+file(GLOB HDR "src/*.h")
 
 add_executable(hello-glfw ${SRC} ${HDR})
 target_link_libraries(hello-glfw ${GLEW_LIBRARIES} ${GLFW3_LIBRARY} ${OPENGL_gl_LIBRARY})
