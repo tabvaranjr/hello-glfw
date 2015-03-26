@@ -1,6 +1,7 @@
 #include "ShaderProgram.h"
 
-ShaderProgram::ShaderProgram()
+ShaderProgram::ShaderProgram() :
+    object(0)
 {
 }
 

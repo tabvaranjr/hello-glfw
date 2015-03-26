@@ -10,10 +10,10 @@ public:
     ShaderProgram();
     ~ShaderProgram();
 
-    GLuint getObject() const { return mObject; }
+    GLuint getObject() const { return object; }
 
 private:
-    GLuint mObject;
+    GLuint object;
 };
 
 #endif
