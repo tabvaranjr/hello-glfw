@@ -6,13 +6,12 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-
 #include <iostream>
-#include <fstream>
-#include <sstream>
 #include <cstdlib>
 #include <boost/format.hpp>
 #include <cmath>
+
+#include "File.h"
 
 /// Activates KHR_debug extension in OpenGL.
 static bool IsDebugEnabled = false;
@@ -147,25 +146,6 @@ static void glDebugCallback(GLenum source, GLenum type, GLuint id, GLenum severi
 }
 
 
-/// Reads a text file into a string
-std::string readTextFile(const std::string& filename)
-{
-    std::ifstream ifs(filename.c_str());
-    if (ifs)
-    {
-        std::stringstream sstr;
-        sstr << ifs.rdbuf();
-        ifs.close();
-        return sstr.str();
-    }
-    else
-    {
-        std::cerr << boost::format("Failed to open %1% for reading.") % filename << std::endl;
-        return "";
-    }
-}
-
-
 /// Create a triangle.
 GLuint createTriangle()
 {
@@ -229,19 +209,19 @@ GLuint createShaderProgram(const std::string& program)
 {
     boost::format file("shaders/%1%.%2%");
 
-    std::string&& vertexShaderFile = readTextFile((file % program % "vert").str());
+    std::string&& vertexShaderFile = File::readTextFile((file % program % "vert").str());
     auto vertexShaderFilePtr = vertexShaderFile.c_str();
     GLuint triangleVs = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(triangleVs, 1, &vertexShaderFilePtr, nullptr);
     glCompileShader(triangleVs);
 
-    std::string&& geometryShaderFile = readTextFile((file % program % "geom").str());
+    std::string&& geometryShaderFile = File::readTextFile((file % program % "geom").str());
     auto geometryShaderFilePtr = geometryShaderFile.c_str();
     GLuint triangleGs = glCreateShader(GL_GEOMETRY_SHADER);
     glShaderSource(triangleGs, 1, &geometryShaderFilePtr, nullptr);
     glCompileShader(triangleGs);
 
-    std::string&& fragmentShaderFile = readTextFile((file % program % "frag").str());
+    std::string&& fragmentShaderFile = File::readTextFile((file % program % "frag").str());
     auto fragmentShaderFilePtr = fragmentShaderFile.c_str();
     GLuint triangleFs = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(triangleFs, 1, &fragmentShaderFilePtr, nullptr);
@@ -258,6 +238,16 @@ GLuint createShaderProgram(const std::string& program)
     glBindAttribLocation(sp, 2, "normal");
 
     glLinkProgram(sp);
+
+    // Free the resources taken by the shader stage
+    // It will be done once the program is deleted; otherwise, they will continue to exist!
+    glDetachShader(sp, triangleVs);
+    glDetachShader(sp, triangleGs);
+    glDetachShader(sp, triangleFs);
+
+    glDeleteShader(triangleVs);
+    glDeleteShader(triangleGs);
+    glDeleteShader(triangleFs);
 
     return sp;
 }
