@@ -12,6 +12,8 @@
 #include <cmath>
 
 #include "File.h"
+#include "Shader.h"
+#include "ShaderProgram.h"
 
 /// Activates KHR_debug extension in OpenGL.
 static bool IsDebugEnabled = false;
