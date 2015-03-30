@@ -15,9 +15,14 @@
 #include "Shader.h"
 #include "ShaderProgram.h"
 
-/// Activates KHR_debug extension in OpenGL.
-static bool IsDebugEnabled = false;
-static bool IsFullScreenEnabled = false;
+/// Holds the global parameters of the application.
+struct ApplicationParameters
+{
+    ApplicationParameters() : IsDebugModeActive(false), IsFullScreen(false) {}
+    
+    bool IsDebugModeActive;
+    bool IsFullScreen;
+};
 
 /// Callback for errors logged by GLFW
 static void glfwErrorCallback(int error, const char* description)
@@ -256,26 +261,30 @@ GLuint createShaderProgram(const std::string& program)
 
 
 /// Parses the command line
-void parseCommandLine(int argc, char* argv[])
+ApplicationParameters parseCommandLine(int argc, char* argv[])
 {
+    ApplicationParameters parameters;
+
     for (int i = 0; i < argc; ++i)
     {
         if (std::string(argv[i]) == "-d") 
         {
             std::cout << "Debug mode is enabled." << std::endl;            
-            IsDebugEnabled = true;
+            parameters.IsDebugModeActive = true;
         }
         else if (std::string(argv[i]) == "-f")
         {
             std::cout << "Full Screen mode is enabled." << std::endl;
-            IsFullScreenEnabled = true;
+            parameters.IsFullScreen = true;
         }
     }
+
+    return parameters;
 }
 
 
 /// Makes an OpenGL context with a window
-GLFWwindow* makeContext()
+GLFWwindow* makeContext(const ApplicationParameters& parameters)
 {
     glfwSetErrorCallback(glfwErrorCallback);
 
@@ -285,13 +294,13 @@ GLFWwindow* makeContext()
         return nullptr;
     }
 
-    if (IsDebugEnabled)
+    if (parameters.IsDebugModeActive)
     {
         glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
     }
 
     GLFWwindow* window = nullptr;
-    if (IsFullScreenEnabled)
+    if (parameters.IsFullScreen)
     {
         auto monitor = glfwGetPrimaryMonitor();
         auto mode = glfwGetVideoMode(monitor);
@@ -326,7 +335,7 @@ GLFWwindow* makeContext()
         return nullptr;
     }
 
-    if (IsDebugEnabled)
+    if (parameters.IsDebugModeActive)
     {
         if (GLEW_VERSION_4_3 || GLEW_KHR_debug)
         {
@@ -364,9 +373,9 @@ void destroyContext(GLFWwindow* window)
 /// Program entry point
 int main(int argc, char* argv[])
 {
-    parseCommandLine(argc, argv);
+    auto&& parameters = parseCommandLine(argc, argv);
 
-    auto window = makeContext();
+    auto window = makeContext(parameters);
     if (window == nullptr)
     {
         return EXIT_FAILURE;
