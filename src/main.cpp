@@ -17,7 +17,7 @@
 
 /// Activates KHR_debug extension in OpenGL.
 static bool IsDebugEnabled = false;
-
+static bool IsFullScreenEnabled = false;
 
 /// Callback for errors logged by GLFW
 static void glfwErrorCallback(int error, const char* description)
@@ -264,7 +264,12 @@ void parseCommandLine(int argc, char* argv[])
         {
             std::cout << "Debug mode is enabled." << std::endl;            
             IsDebugEnabled = true;
-        }    
+        }
+        else if (std::string(argv[i]) == "-f")
+        {
+            std::cout << "Full Screen mode is enabled." << std::endl;
+            IsFullScreenEnabled = true;
+        }
     }
 }
 
@@ -285,7 +290,23 @@ GLFWwindow* makeContext()
         glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
     }
 
-    auto window = glfwCreateWindow(800, 800, "Hello GLFW3", nullptr, nullptr);
+    GLFWwindow* window = nullptr;
+    if (IsFullScreenEnabled)
+    {
+        auto monitor = glfwGetPrimaryMonitor();
+        auto mode = glfwGetVideoMode(monitor);
+
+        glfwWindowHint(GLFW_RED_BITS, mode->redBits);
+        glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
+        glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
+        glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
+        window = glfwCreateWindow(mode->width, mode->height, "Hello GLFW3", monitor, nullptr);
+    }
+    else
+    {
+        window = glfwCreateWindow(800, 800, "Hello GLFW3", nullptr, nullptr);
+    }
+
     if (window == nullptr)
     {
         glfwTerminate();
