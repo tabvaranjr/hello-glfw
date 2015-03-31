@@ -11,18 +11,10 @@
 #include <boost/format.hpp>
 #include <cmath>
 
+#include "ApplicationParameters.h"
 #include "File.h"
 #include "Shader.h"
 #include "ShaderProgram.h"
-
-/// Holds the global parameters of the application.
-struct ApplicationParameters
-{
-    ApplicationParameters() : IsDebugModeActive(false), IsFullScreen(false) {}
-    
-    bool IsDebugModeActive;
-    bool IsFullScreen;
-};
 
 /// Callback for errors logged by GLFW
 static void glfwErrorCallback(int error, const char* description)
@@ -36,19 +28,19 @@ static void glfwKeyCallback(GLFWwindow* window, int key, int scancode, int actio
 {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
     {
-        glfwSetWindowShouldClose(window, GL_TRUE);    
+        glfwSetWindowShouldClose(window, GL_TRUE);
     }
 }
 
 
 /// Callback for mouse press/releases logged by GLFW
 static void glfwMouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
-{        
-    std::string buttonStr;         
+{
+    std::string buttonStr;
     switch (button)
     {
     case GLFW_MOUSE_BUTTON_LEFT:
-        buttonStr = "Left button";   
+        buttonStr = "Left button";
         break;
 
     case GLFW_MOUSE_BUTTON_MIDDLE:
@@ -64,12 +56,12 @@ static void glfwMouseButtonCallback(GLFWwindow* window, int button, int action, 
         break;
     }
 
-    std::string actionStr;    
+    std::string actionStr;
     switch (action)
     {
     case GLFW_PRESS:
         actionStr = "pressed";
-        break;    
+        break;
 
     case GLFW_RELEASE:
         actionStr = "released";
@@ -83,7 +75,7 @@ static void glfwMouseButtonCallback(GLFWwindow* window, int button, int action, 
         {
             modsStr += "SHIFT";
         }
-        
+
         if (mods & GLFW_MOD_CONTROL)
         {
             if (!modsStr.empty())
@@ -92,7 +84,7 @@ static void glfwMouseButtonCallback(GLFWwindow* window, int button, int action, 
             }
 
             modsStr += "CTRL";
-        } 
+        }
 
         if (mods & GLFW_MOD_ALT)
         {
@@ -112,13 +104,13 @@ static void glfwMouseButtonCallback(GLFWwindow* window, int button, int action, 
             }
 
             modsStr += "SUPER";
-        }    
+        }
     }
     else
     {
-        modsStr = "None";    
+        modsStr = "None";
     }
-    
+
     std::cout << boost::format("%1% %2% with %3% modifier keys") % buttonStr % actionStr % modsStr << std::endl;
 }
 
@@ -156,7 +148,7 @@ static void glDebugCallback(GLenum source, GLenum type, GLuint id, GLenum severi
 /// Create a triangle.
 GLuint createTriangle()
 {
-    GLfloat triangleVertices[] = 
+    GLfloat triangleVertices[] =
     {
         0.5f, 0.5f, 0.0f,
         -0.5f, 0.5f, 0.0f,
@@ -180,7 +172,7 @@ GLuint createTriangle()
     // Create a VBO for the triangle.
     GLuint triangleVbo[3];
     glGenBuffers(3, triangleVbo);
-    
+
     glBindBuffer(GL_ARRAY_BUFFER, triangleVbo[0]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(triangleVertices), triangleVertices, GL_STATIC_DRAW);
 
@@ -194,15 +186,15 @@ GLuint createTriangle()
     GLuint triangleVao;
     glGenVertexArrays(1, &triangleVao);
     glBindVertexArray(triangleVao);
-   
+
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, triangleVbo[0]);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-    
+
     glEnableVertexAttribArray(1);
     glBindBuffer(GL_ARRAY_BUFFER, triangleVbo[1]);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-    
+
     glEnableVertexAttribArray(1);
     glBindBuffer(GL_ARRAY_BUFFER, triangleVbo[2]);
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
@@ -267,9 +259,9 @@ ApplicationParameters parseCommandLine(int argc, char* argv[])
 
     for (int i = 0; i < argc; ++i)
     {
-        if (std::string(argv[i]) == "-d") 
+        if (std::string(argv[i]) == "-d")
         {
-            std::cout << "Debug mode is enabled." << std::endl;            
+            std::cout << "Debug mode is enabled." << std::endl;
             parameters.IsDebugModeActive = true;
         }
         else if (std::string(argv[i]) == "-f")
@@ -323,7 +315,7 @@ GLFWwindow* makeContext(const ApplicationParameters& parameters)
     }
 
     glfwMakeContextCurrent(window);
-    glfwSwapInterval(1);    
+    glfwSwapInterval(1);
 
     // Reminder: GLEW requires a valid OpenGL context before initialization.
     GLenum err = glewInit();
@@ -390,24 +382,24 @@ int main(int argc, char* argv[])
     auto view_location = glGetUniformLocation(sp, "view");
     auto proj_location = glGetUniformLocation(sp, "proj");
 
-    GLfloat model[] = 
-    { 
+    GLfloat model[] =
+    {
         1.0f, 0.0f, 0.0f, 0.0f,
         0.0f, 1.0f, 0.0f, 0.0f,
         0.0f, 0.0f, 1.0f, 0.0f,
         0.0f, 0.0f, 0.0f, 1.0f
     };
 
-    GLfloat view[] = 
-    { 
+    GLfloat view[] =
+    {
         1.0f, 0.0f, 0.0f, 0.0f,
         0.0f, 1.0f, 0.0f, 0.0f,
         0.0f, 0.0f, 1.0f, 0.0f,
         0.0f, 0.0f, 0.0f, 1.0f
     };
 
-    GLfloat proj[] = 
-    { 
+    GLfloat proj[] =
+    {
         1.0f, 0.0f, 0.0f, 0.0f,
         0.0f, 1.0f, 0.0f, 0.0f,
         0.0f, 0.0f, 1.0f, 0.0f,
@@ -423,20 +415,20 @@ int main(int argc, char* argv[])
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glUseProgram(sp);
-        
+
         float time = static_cast<float>(glfwGetTime());
         view[0] = cos(time);
         view[1] = -sin(time);
         view[4] = sin(time);
         view[5] = cos(time);
-        
+
         glUniformMatrix4fv(model_location, 1, GL_FALSE, model);
         glUniformMatrix4fv(view_location, 1, GL_FALSE, view);
         glUniformMatrix4fv(proj_location, 1, GL_FALSE, proj);
-        
+
         glBindVertexArray(vao);
         glDrawArrays(GL_TRIANGLES, 0, 3);
-    
+
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
@@ -445,4 +437,3 @@ int main(int argc, char* argv[])
 
     return EXIT_SUCCESS;
 }
-
