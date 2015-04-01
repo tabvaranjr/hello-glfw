@@ -29,6 +29,9 @@ include_directories(${GLFW3_INCLUDE_DIR})
 find_package(GLEW REQUIRED)
 include_directories(${GLEW_INCLUDE_DIRS})
 
+find_package(GLM REQUIRED)
+include_directories(${GLM_INCLUDE_DIR})
+
 # Boost C++ Libraries
 find_package(Boost REQUIRED)
 include_directories(${Boost_INCLUDE_DIR})
@@ -46,4 +49,3 @@ install(TARGETS hello-glfw RUNTIME DESTINATION bin)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/shaders DESTINATION share)
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/shaders DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-

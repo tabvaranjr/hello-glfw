@@ -4,8 +4,6 @@
 #include <cstdlib>
 #include <boost/format.hpp>
 
-#include "ApplicationParameters.h"
-
 /// Callback for errors logged by GLFW
 static void glfwErrorCallback(int error, const char* description)
 {
