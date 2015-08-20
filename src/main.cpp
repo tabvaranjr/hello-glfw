@@ -76,7 +76,6 @@ GLuint createTriangle()
     return vao;
 }
 
-
 /// Create the shader program.
 GLuint createShaderProgram(const std::string& program)
 {
@@ -124,7 +123,6 @@ GLuint createShaderProgram(const std::string& program)
     return sp;
 }
 
-
 /// Parses the command line
 ApplicationParameters parseCommandLine(int argc, char* argv[])
 {
@@ -146,7 +144,6 @@ ApplicationParameters parseCommandLine(int argc, char* argv[])
 
     return parameters;
 }
-
 
 /// Program entry point
 int main(int argc, char* argv[])
@@ -171,7 +168,7 @@ int main(int argc, char* argv[])
     glClearColor(0.05f, 0.05f, 0.05f, 1.0);
 
     // Main loop
-    while (!context->isCloseFlagged())
+    while (!context->isCloseRequested())
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

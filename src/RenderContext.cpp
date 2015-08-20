@@ -1,7 +1,7 @@
 #include "RenderContext.h"
 
 #include <iostream>
-#include <cstdlib>
+#include <stdexcept>
 #include <boost/format.hpp>
 
 /// Callback for errors logged by GLFW
@@ -19,7 +19,6 @@ static void glfwKeyCallback(GLFWwindow* window, int key, int scancode, int actio
         glfwSetWindowShouldClose(window, GL_TRUE);
     }
 }
-
 
 /// Callback for mouse press/releases logged by GLFW
 static void glfwMouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
@@ -144,7 +143,6 @@ RenderContext::~RenderContext()
     destroyContext();
 }
 
-
 void RenderContext::swapBuffers()
 {
     glfwSwapBuffers(window);
@@ -156,7 +154,7 @@ void RenderContext::poolEvents()
     glfwPollEvents();
 }
 
-bool RenderContext::isCloseFlagged()
+bool RenderContext::isCloseRequested()
 {
     return glfwWindowShouldClose(window);
 }
@@ -167,14 +165,18 @@ void RenderContext::makeContext()
 
     if (!glfwInit())
     {
-        std::cerr << "Failed to initialize GLFW." << std::endl;
-        return;
+        throw std::runtime_error("Failed to initialize GLFW.");
     }
 
     if (parameters.IsDebugModeActive)
     {
         glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
     }
+
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     window = nullptr;
     if (parameters.IsFullScreen)
@@ -186,6 +188,7 @@ void RenderContext::makeContext()
         glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
         glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
         glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
+
         window = glfwCreateWindow(mode->width, mode->height, "Hello GLFW3", monitor, nullptr);
     }
     else
@@ -195,22 +198,15 @@ void RenderContext::makeContext()
 
     if (window == nullptr)
     {
-        glfwTerminate();
-        return;
+        destroyContext();
+        throw std::runtime_error("Failed to create a window with GLFW.");
     }
 
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1);
 
     // Reminder: GLEW requires a valid OpenGL context before initialization.
-    GLenum err = glewInit();
-    if (err != GLEW_OK)
-    {
-        std::cerr << boost::format("Failed to initialize GLEW: %1%") % glewGetErrorString(err) << std::endl;
-
-        glfwTerminate();
-        return;
-    }
+    initializeGlew();
 
     if (parameters.IsDebugModeActive)
     {
@@ -234,6 +230,17 @@ void RenderContext::makeContext()
     glfwSetMouseButtonCallback(window, glfwMouseButtonCallback);
     glfwSetWindowIconifyCallback(window, glfwWindowIconifyCallback);
     glfwSetWindowSizeCallback(window, glfwWindowSizeCallback);
+}
+
+void RenderContext::initializeGlew()
+{
+    glewExperimental = GL_TRUE;
+    GLenum err = glewInit();
+    if (err != GLEW_OK)
+    {
+        destroyContext();
+        throw std::runtime_error(boost::str(boost::format("Failed to initialize GLEW: %1%") % glewGetErrorString(err)));
+    }
 }
 
 

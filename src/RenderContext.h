@@ -20,7 +20,7 @@ public:
 
     void poolEvents();
 
-    bool isCloseFlagged();
+    bool isCloseRequested();
 
 private:
     GLFWwindow* window;
@@ -28,6 +28,8 @@ private:
 
     void makeContext();
     void destroyContext();
+
+    void initializeGlew();
 };
 
 #endif
