@@ -1,9 +1,9 @@
 #include "File.h"
 
+#include <format.h>
 #include <fstream>
-#include <sstream>
 #include <iostream>
-#include <boost/format.hpp>
+#include <sstream>
 
 std::string File::readTextFile(const std::string& filename)
 {
@@ -17,7 +17,7 @@ std::string File::readTextFile(const std::string& filename)
     }
     else
     {
-        std::cerr << boost::format("Failed to open %1% for reading.") % filename << std::endl;
+        fmt::print(std::cerr, "Failed to open {0} for reading.\n", filename);
         return "";
     }
 }

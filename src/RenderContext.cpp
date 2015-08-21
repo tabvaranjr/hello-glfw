@@ -1,15 +1,14 @@
 #include "RenderContext.h"
 
+#include <format.h>
 #include <iostream>
 #include <stdexcept>
-#include <boost/format.hpp>
 
 /// Callback for errors logged by GLFW
 static void glfwErrorCallback(int error, const char* description)
 {
-    std::cerr << boost::format("Error %1%: %2%") % error % description << std::endl;
+    fmt::print("Error {0:#x}: {1}\n", error, description);
 }
-
 
 /// Callback for keys logged by GLFW
 static void glfwKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -39,7 +38,7 @@ static void glfwMouseButtonCallback(GLFWwindow* window, int button, int action, 
         break;
 
     default:
-        buttonStr = (boost::format("Button %1%") % button).str();
+        buttonStr = fmt::format("Button {0}", button);
         break;
     }
 
@@ -98,37 +97,34 @@ static void glfwMouseButtonCallback(GLFWwindow* window, int button, int action, 
         modsStr = "None";
     }
 
-    std::cout << boost::format("%1% %2% with %3% modifier keys") % buttonStr % actionStr % modsStr << std::endl;
+    fmt::print("{0} {1} with {2} modifier key(s)\n", buttonStr, actionStr, modsStr);
 }
-
 
 /// Callback when the window is minimized/iconified
 static void glfwWindowIconifyCallback(GLFWwindow* window, int iconified)
 {
     if (iconified)
     {
-        std::cout << "Window was minimized." << std::endl;
+        fmt::print("Window was minimized\n");
     }
     else
     {
-        std::cout << "Window was restored." << std::endl;
+        fmt::print("Window was restored\n");
     }
 }
-
 
 /// Callback when the size of the window is changed
 static void glfwWindowSizeCallback(GLFWwindow* window, int width, int height)
 {
-    std::cout << boost::format("Window size changed to %1% x %2%") % width % height << std::endl;
+    fmt::print("Window size change to {0} x {1}\n", width, height);
 
     glViewport(0, 0, width, height);
 }
 
-
 /// Callback when an debug message is sent by OpenGL (with KHR_debug extension/OpenGL 4.3)
 static void glDebugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, void* userParam)
 {
-    std::cerr << boost::format("Error %1%: %2%") % id % message << std::endl;
+    fmt::print(std::cerr, "Error {0:#x}: {1}\n", id, message);
 }
 
 RenderContext::RenderContext(const ApplicationParameters& cliParameters) :
@@ -165,7 +161,7 @@ void RenderContext::makeContext()
 
     if (!glfwInit())
     {
-        throw std::runtime_error("Failed to initialize GLFW.");
+        throw std::runtime_error("Failed to initialize GLFW");
     }
 
     if (parameters.IsDebugModeActive)
@@ -199,7 +195,7 @@ void RenderContext::makeContext()
     if (window == nullptr)
     {
         destroyContext();
-        throw std::runtime_error("Failed to create a window with GLFW.");
+        throw std::runtime_error("Failed to create a window with GLFW");
     }
 
     glfwMakeContextCurrent(window);
@@ -217,13 +213,13 @@ void RenderContext::makeContext()
         }
         else
         {
-            std::cerr << "Missing KHR_debug extension support for debug output." << std::endl;
+            fmt::print(std::cerr, "Missing KHR_debug extension support for debug output\n");
         }
     }
 
-    std::cout << boost::format("Vendor: %1%") % glGetString(GL_VENDOR) << std::endl;
-    std::cout << boost::format("Renderer: %1%") % glGetString(GL_RENDERER) << std::endl;
-    std::cout << boost::format("Version: %1%") % glGetString(GL_VERSION)  << std::endl;
+    fmt::print("Vendor: {0}\n", glGetString(GL_VENDOR));
+    fmt::print("Renderer: {0}\n", glGetString(GL_RENDERER));
+    fmt::print("Version: {0}\n", glGetString(GL_VERSION));
 
     // Set callbacks for feedback.
     glfwSetKeyCallback(window, glfwKeyCallback);
@@ -239,7 +235,7 @@ void RenderContext::initializeGlew()
     if (err != GLEW_OK)
     {
         destroyContext();
-        throw std::runtime_error(boost::str(boost::format("Failed to initialize GLEW: %1%") % glewGetErrorString(err)));
+        throw std::runtime_error(fmt::format("Failed to initialize GLEW: {0}", glewGetErrorString(err)));
     }
 }
 
