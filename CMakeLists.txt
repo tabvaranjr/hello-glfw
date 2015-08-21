@@ -29,12 +29,13 @@ include_directories(${GLFW3_INCLUDE_DIR})
 find_package(GLEW REQUIRED)
 include_directories(${GLEW_INCLUDE_DIRS})
 
+# GLM
 find_package(GLM REQUIRED)
 include_directories(${GLM_INCLUDE_DIR})
 
-# Boost C++ Libraries
-find_package(Boost REQUIRED)
-include_directories(${Boost_INCLUDE_DIR})
+# cppformat
+find_package(CppFormat REQUIRED)
+include_directories(${CPPFORMAT_INCLUDE_DIR})
 
 # ----------------------------------------------------------------------------
 # Program
@@ -44,7 +45,7 @@ file(GLOB SRC "src/*.cpp")
 file(GLOB HDR "src/*.h")
 
 add_executable(hello-glfw ${SRC} ${HDR})
-target_link_libraries(hello-glfw ${GLEW_LIBRARIES} ${GLFW3_LIBRARY} ${OPENGL_gl_LIBRARY})
+target_link_libraries(hello-glfw ${GLEW_LIBRARIES} ${GLFW3_LIBRARY} ${OPENGL_gl_LIBRARY} ${CPPFORMAT_LIBRARY})
 install(TARGETS hello-glfw RUNTIME DESTINATION bin)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/shaders DESTINATION share)
 

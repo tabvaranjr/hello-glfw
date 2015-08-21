@@ -3,15 +3,14 @@
 /// \author Patrick Clément-Bonhomme <patrick.cb@gmail.com>
 ///
 
-#include <iostream>
 #include <cstdlib>
 #include <cmath>
 #include <memory>
-#include <boost/format.hpp>
 #include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <format.h>
 
 #include "ApplicationParameters.h"
 #include "File.h"
@@ -79,21 +78,19 @@ GLuint createTriangle()
 /// Create the shader program.
 GLuint createShaderProgram(const std::string& program)
 {
-    boost::format file("shaders/%1%.%2%");
-
-    std::string&& vertexShaderFile = File::readTextFile((file % program % "vert").str());
+    std::string&& vertexShaderFile = File::readTextFile(fmt::format("shaders/{0}.vert", program));
     auto vertexShaderFilePtr = vertexShaderFile.c_str();
     GLuint triangleVs = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(triangleVs, 1, &vertexShaderFilePtr, nullptr);
     glCompileShader(triangleVs);
 
-    std::string&& geometryShaderFile = File::readTextFile((file % program % "geom").str());
+    std::string&& geometryShaderFile = File::readTextFile(fmt::format("shaders/{0}.geom", program));
     auto geometryShaderFilePtr = geometryShaderFile.c_str();
     GLuint triangleGs = glCreateShader(GL_GEOMETRY_SHADER);
     glShaderSource(triangleGs, 1, &geometryShaderFilePtr, nullptr);
     glCompileShader(triangleGs);
 
-    std::string&& fragmentShaderFile = File::readTextFile((file % program % "frag").str());
+    std::string&& fragmentShaderFile = File::readTextFile(fmt::format("shaders/{0}.frag", program));
     auto fragmentShaderFilePtr = fragmentShaderFile.c_str();
     GLuint triangleFs = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(triangleFs, 1, &fragmentShaderFilePtr, nullptr);
@@ -132,12 +129,12 @@ ApplicationParameters parseCommandLine(int argc, char* argv[])
     {
         if (std::string(argv[i]) == "-d")
         {
-            std::cout << "Debug mode is enabled." << std::endl;
+            fmt::print("Debug mode is enabled\n");
             parameters.IsDebugModeActive = true;
         }
         else if (std::string(argv[i]) == "-f")
         {
-            std::cout << "Full Screen mode is enabled." << std::endl;
+            fmt::print("Full screen mode is enabled\n");
             parameters.IsFullScreen = true;
         }
     }
