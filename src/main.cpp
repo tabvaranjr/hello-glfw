@@ -14,33 +14,31 @@
 
 #include "ApplicationParameters.h"
 #include "File.h"
-#include "Shader.h"
-#include "ShaderProgram.h"
 #include "RenderContext.h"
 #include "Primitives.h"
 
 /// Create the shader program.
 GLuint createShaderProgram(const std::string& program)
 {
-    std::string&& vertexShaderFile = File::readTextFile(fmt::format("shaders/{0}.vert", program));
+    auto&& vertexShaderFile = File::readTextFile(fmt::format("shaders/{0}.vert", program));
     auto vertexShaderFilePtr = vertexShaderFile.c_str();
-    GLuint triangleVs = glCreateShader(GL_VERTEX_SHADER);
+    auto triangleVs = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(triangleVs, 1, &vertexShaderFilePtr, nullptr);
     glCompileShader(triangleVs);
 
-    std::string&& geometryShaderFile = File::readTextFile(fmt::format("shaders/{0}.geom", program));
+    auto&& geometryShaderFile = File::readTextFile(fmt::format("shaders/{0}.geom", program));
     auto geometryShaderFilePtr = geometryShaderFile.c_str();
-    GLuint triangleGs = glCreateShader(GL_GEOMETRY_SHADER);
+    auto triangleGs = glCreateShader(GL_GEOMETRY_SHADER);
     glShaderSource(triangleGs, 1, &geometryShaderFilePtr, nullptr);
     glCompileShader(triangleGs);
 
-    std::string&& fragmentShaderFile = File::readTextFile(fmt::format("shaders/{0}.frag", program));
+    auto&& fragmentShaderFile = File::readTextFile(fmt::format("shaders/{0}.frag", program));
     auto fragmentShaderFilePtr = fragmentShaderFile.c_str();
-    GLuint triangleFs = glCreateShader(GL_FRAGMENT_SHADER);
+    auto triangleFs = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(triangleFs, 1, &fragmentShaderFilePtr, nullptr);
     glCompileShader(triangleFs);
 
-    GLuint sp = glCreateProgram();
+    auto sp = glCreateProgram();
     glAttachShader(sp, triangleVs);
     glAttachShader(sp, triangleGs);
     glAttachShader(sp, triangleFs);
@@ -90,17 +88,17 @@ int main(int argc, char* argv[])
     auto context = std::make_shared<RenderContext>(parameters);
 
     // Create resources.
-    GLuint vao = createTriangle();
-    GLuint sp = createShaderProgram("simple");
+    auto vao = createTriangle();
+    auto sp = createShaderProgram("simple");
 
     // Set camera matrices.
     auto model_location = glGetUniformLocation(sp, "model");
     auto view_location = glGetUniformLocation(sp, "view");
     auto proj_location = glGetUniformLocation(sp, "proj");
 
-    glm::mat4x4 model = glm::mat4x4(1.0);
-    glm::mat4x4 proj = glm::mat4x4(1.0);
-    glm::mat4x4 view = glm::mat4x4(1.0);
+    auto model = glm::mat4x4(1.0);
+    auto proj = glm::mat4x4(1.0);
+    auto view = glm::mat4x4(1.0);
 
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.05f, 0.05f, 0.05f, 1.0);
@@ -112,7 +110,7 @@ int main(int argc, char* argv[])
 
         glUseProgram(sp);
 
-        float time = static_cast<float>(glfwGetTime());
+        auto time = static_cast<float>(glfwGetTime());
         model = glm::rotate(glm::mat4x4(1.0), time, glm::vec3(0, 0, 1));
 
         glUniformMatrix4fv(model_location, 1, GL_FALSE, glm::value_ptr(model));
