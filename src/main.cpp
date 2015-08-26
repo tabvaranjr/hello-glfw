@@ -45,10 +45,6 @@ GLuint createShaderProgram(const std::string& program)
     glAttachShader(sp, triangleGs);
     glAttachShader(sp, triangleFs);
 
-    glBindAttribLocation(sp, 0, "pos");
-    glBindAttribLocation(sp, 1, "color");
-    glBindAttribLocation(sp, 2, "normal");
-
     glLinkProgram(sp);
 
     // Free the resources taken by the shader stage
