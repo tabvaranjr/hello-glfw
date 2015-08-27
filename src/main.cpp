@@ -11,6 +11,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <format.h>
+#include <chrono>
+#include <thread>
 
 #include "ApplicationParameters.h"
 #include "File.h"
@@ -124,6 +126,8 @@ int main(int argc, char* argv[])
 
         context->swapBuffers();
         context->poolEvents();
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
 
     return EXIT_SUCCESS;
