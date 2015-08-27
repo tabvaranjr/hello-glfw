@@ -99,8 +99,8 @@ int main(int argc, char* argv[])
     auto proj_location = glGetUniformLocation(sp, "proj");
 
     auto model = glm::mat4x4(1.0);
-    auto proj = glm::mat4x4(1.0);
-    auto view = glm::mat4x4(1.0);
+    auto proj = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10.0f);
+    auto view = glm::lookAt(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.05f, 0.05f, 0.05f, 1.0);
