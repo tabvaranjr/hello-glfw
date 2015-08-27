@@ -88,7 +88,9 @@ int main(int argc, char* argv[])
     auto context = std::make_shared<RenderContext>(parameters);
 
     // Create resources.
-    auto vao = createTriangle();
+    GLuint vao;
+    GLuint count;
+    createQuad(vao, count);
     auto sp = createShaderProgram("simple");
 
     // Set camera matrices.
@@ -118,7 +120,7 @@ int main(int argc, char* argv[])
         glUniformMatrix4fv(proj_location, 1, GL_FALSE, glm::value_ptr(proj));
 
         glBindVertexArray(vao);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, count);
 
         context->swapBuffers();
         context->poolEvents();

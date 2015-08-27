@@ -4,6 +4,7 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
 
-GLuint createTriangle();
+void createTriangle(GLuint& vao, GLuint& count);
+void createQuad(GLuint& vao, GLuint& count);
 
 #endif
