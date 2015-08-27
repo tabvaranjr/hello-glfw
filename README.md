@@ -9,3 +9,14 @@ Playground for tests with GLFW 3.1 and OpenGL 3.x/4.x
 * [The OpenGL Extension Wrangler Library (glew)](http://glew.sourceforge.net/) (version 1.7.0 or later)
 * [C++ Format](http://cppformat.github.io/) (tested with 1.1.0)
 * [OpenGL Mathematics](http://glm.g-truc.net/) (version 0.9.6 or later)
+
+## Tested Platforms
+### GPUs
+* AMD Radeon HD 8750
+* Intel HD Graphics 4600
+* NVIDIA GeForce GTX 770
+
+### Operating Systems
+* Fedora Linux 22 (main platform)
+* Microsoft Windows 7/8.1
+
