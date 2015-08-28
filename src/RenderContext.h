@@ -1,5 +1,5 @@
-#ifndef __RENDERCONTEXT_H__
-#define __RENDERCONTEXT_H__
+#ifndef HELLO_GLFW_RENDERCONTEXT_H
+#define HELLO_GLFW_RENDERCONTEXT_H
 
 #define GLEW_STATIC
 #include <GL/glew.h>

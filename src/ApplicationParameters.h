@@ -1,5 +1,5 @@
-#ifndef __APPLICATION_PARAMETERS_H__
-#define __APPLICATION_PARAMETERS_H__
+#ifndef HELLO_GLFW_APPLICATION_PARAMETERS_H
+#define HELLO_GLFW_APPLICATION_PARAMETERS_H
 
 /// Holds the global parameters of the application.
 struct ApplicationParameters

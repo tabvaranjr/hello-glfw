@@ -1,5 +1,5 @@
-#ifndef __SHADERPROGRAM_H__
-#define __SHADERPROGRAM_H__
+#ifndef HELLO_GLFW_SHADERPROGRAM_H
+#define HELLO_GLFW_SHADERPROGRAM_H
 
 #define GLEW_STATIC
 #include <GL/glew.h>

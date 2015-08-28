@@ -1,5 +1,5 @@
-#ifndef __FILE_H__
-#define __FILE_H__
+#ifndef HELLO_GLFW_FILE_H
+#define HELLO_GLFW_FILE_H
 
 #include <string>
 
