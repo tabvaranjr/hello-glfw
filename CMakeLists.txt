@@ -2,7 +2,7 @@
 # Makefile for hello-glfw
 # ----------------------------------------------------------------------------
 
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.1)
 project(hello-glfw)
 
 # ----------------------------------------------------------------------------
@@ -11,11 +11,6 @@ project(hello-glfw)
 
 # Add local CMake modules
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules/")
-
-# C++11 support is required
-if (UNIX)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++11")
-endif()
 
 # OpenGL
 find_package(OpenGL REQUIRED)
@@ -46,6 +41,8 @@ file(GLOB HDR "src/*.h")
 
 add_executable(hello-glfw ${SRC} ${HDR})
 target_link_libraries(hello-glfw ${GLEW_LIBRARIES} ${GLFW3_LIBRARY} ${OPENGL_gl_LIBRARY} ${CPPFORMAT_LIBRARY})
+set_property(TARGET hello-glfw PROPERTY CXX_STANDARD_REQUIRED 11)
+
 install(TARGETS hello-glfw RUNTIME DESTINATION bin)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/shaders DESTINATION share)
 
