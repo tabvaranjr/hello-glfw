@@ -16,8 +16,8 @@
 
 #include "ApplicationParameters.h"
 #include "File.h"
+#include "Mesh.h"
 #include "RenderContext.h"
-#include "Primitives.h"
 
 /// Create the shader program.
 GLuint createShaderProgram(const std::string& program)
@@ -90,9 +90,7 @@ int main(int argc, char* argv[])
     auto context = std::make_shared<RenderContext>(parameters);
 
     // Create resources.
-    GLuint vao;
-    GLuint count;
-    createQuad(vao, count);
+    Mesh mesh;
     auto sp = createShaderProgram("simple");
 
     // Set camera matrices.
@@ -121,8 +119,7 @@ int main(int argc, char* argv[])
         glUniformMatrix4fv(view_location, 1, GL_FALSE, glm::value_ptr(view));
         glUniformMatrix4fv(proj_location, 1, GL_FALSE, glm::value_ptr(proj));
 
-        glBindVertexArray(vao);
-        glDrawArrays(GL_TRIANGLES, 0, count);
+        mesh.Draw();
 
         context->swapBuffers();
         context->poolEvents();
