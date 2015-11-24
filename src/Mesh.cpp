@@ -38,7 +38,6 @@ Mesh::Mesh()
     };
 
     // Create vertex buffer objects (VBOs)
-    GLuint vbo[3];
     glGenBuffers(3, vbo);
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
@@ -62,7 +61,7 @@ Mesh::Mesh()
     glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 
-    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
     glBindBuffer(GL_ARRAY_BUFFER, vbo[2]);
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 
@@ -71,6 +70,8 @@ Mesh::Mesh()
 
 Mesh::~Mesh()
 {
+    glDeleteVertexArrays(1, &vao);
+    glDeleteBuffers(3, vbo);
 }
 
 void Mesh::Draw() const

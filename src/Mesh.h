@@ -14,6 +14,7 @@ public:
 
 private:
     GLuint vao;
+    GLuint vbo[3];
     GLsizei count;
 };
 
