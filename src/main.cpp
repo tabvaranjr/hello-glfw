@@ -15,6 +15,7 @@
 #include <thread>
 
 #include "ApplicationParameters.h"
+#include "Demo.h"
 #include "Mesh.h"
 #include "RenderContext.h"
 #include "ShaderProgram.h"
@@ -44,18 +45,18 @@ ApplicationParameters parseCommandLine(int argc, char* argv[])
 /// Program entry point
 int main(int argc, char* argv[])
 {
-    auto&& parameters = parseCommandLine(argc, argv);
+    auto parameters = parseCommandLine(argc, argv);
 
     auto context = std::make_shared<RenderContext>(parameters);
 
     // Create resources.
-    Mesh mesh;
-    auto sp = ShaderProgram::createFromFiles("simple");
+    auto mesh = makeQuad();
+    auto sp = makeShaderProgram("simple");
 
     // Set camera matrices.
-    auto model_location = glGetUniformLocation(sp, "model");
-    auto view_location = glGetUniformLocation(sp, "view");
-    auto proj_location = glGetUniformLocation(sp, "proj");
+    auto model_location = glGetUniformLocation(sp->getId(), "model");
+    auto view_location = glGetUniformLocation(sp->getId(), "view");
+    auto proj_location = glGetUniformLocation(sp->getId(), "proj");
 
     auto model = glm::mat4x4(1.0);
     auto proj = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10.0f);
@@ -69,7 +70,7 @@ int main(int argc, char* argv[])
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        glUseProgram(sp);
+        glUseProgram(sp->getId());
 
         auto time = static_cast<float>(glfwGetTime());
         model = glm::rotate(glm::mat4x4(1.0), time, glm::vec3(0, 0, 1));
@@ -78,7 +79,7 @@ int main(int argc, char* argv[])
         glUniformMatrix4fv(view_location, 1, GL_FALSE, glm::value_ptr(view));
         glUniformMatrix4fv(proj_location, 1, GL_FALSE, glm::value_ptr(proj));
 
-        mesh.Draw();
+        mesh->Draw();
 
         context->swapBuffers();
         context->poolEvents();

@@ -4,6 +4,7 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <stdexcept>
 
 std::string File::readTextFile(const std::string& filename)
 {
@@ -17,8 +18,6 @@ std::string File::readTextFile(const std::string& filename)
     }
     else
     {
-        fmt::print(std::cerr, "Failed to open {0} for reading.\n", filename);
-        return "";
+        throw std::runtime_error(fmt::format("Failed to open {0} for reading.\n", filename));
     }
 }
-

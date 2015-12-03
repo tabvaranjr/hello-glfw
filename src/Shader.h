@@ -1,20 +1,26 @@
 #ifndef HELLO_GLFW_SHADER_H
 #define HELLO_GLFW_SHADER_H
 
-#define GLEW_STATIC
 #include <GL/glew.h>
+#include <string>
 
 class Shader
 {
 public:
-    Shader();
+    enum class Type : GLenum
+    {
+        Vertex = GL_VERTEX_SHADER,
+        Geometry = GL_GEOMETRY_SHADER,
+        Fragment = GL_FRAGMENT_SHADER
+    };
+
+    Shader(Type type, const std::string& source);
     ~Shader();
 
-    GLuint getObject() const { return object; }
+    GLuint getId() const { return id; }
 
 private:
-    GLuint object;    
+    GLuint id;
 };
 
 #endif
-
