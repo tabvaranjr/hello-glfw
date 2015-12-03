@@ -1,42 +1,9 @@
 #include "Mesh.h"
 
-#include <glm/mat4x4.hpp>
-#include <glm/vec3.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <vector>
 
-Mesh::Mesh()
+Mesh::Mesh(const std::vector<glm::vec3>& vertices, const std::vector<glm::vec3>& colors, const std::vector<glm::vec3>& normals)
 {
-    std::vector<glm::vec3> vertices
-    {
-        { -0.5f, -0.5f, 0.0f },
-        { 0.5f, 0.5f, 0.0f },
-        { -0.5f, 0.5f, 0.0f },
-        { 0.5f, -0.5f, 0.0f },
-        { 0.5f, 0.5f, 0.0f },
-        { -0.5f, -0.5f, 0.0f }
-    };
-
-    std::vector<glm::vec3> colors
-    {
-        { 1.0f, 0.0f, 0.0f },
-        { 0.0f, 1.0f, 0.0f },
-        { 0.0f, 0.0f, 1.0f },
-        { 1.0f, 1.0f, 0.0f },
-        { 0.0f, 1.0f, 0.0f },
-        { 1.0f, 0.0f, 0.0f }
-    };
-
-    std::vector<glm::vec3> normals
-    {
-        { 0.0f, 0.0f, 1.0f },
-        { 0.0f, 0.0f, 1.0f },
-        { 0.0f, 0.0f, 1.0f },
-        { 0.0f, 0.0f, 1.0f },
-        { 0.0f, 0.0f, 1.0f },
-        { 0.0f, 0.0f, 1.0f }
-    };
-
     // Create vertex buffer objects (VBOs)
     glGenBuffers(3, vbo);
 

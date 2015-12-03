@@ -8,6 +8,6 @@
 
 std::shared_ptr<ShaderProgram> makeShaderProgram(const std::string& program);
 
-std::shared_ptr<Mesh> makeQuad();
+std::shared_ptr<Mesh> makeSimpleQuad();
 
 #endif

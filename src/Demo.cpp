@@ -19,7 +19,37 @@ std::shared_ptr<ShaderProgram> makeShaderProgram(const std::string& program)
     return std::make_shared<ShaderProgram>(vs, gs, fs);
 }
 
-std::shared_ptr<Mesh> makeQuad()
+std::shared_ptr<Mesh> makeSimpleQuad()
 {
-    return std::make_shared<Mesh>();
+    std::vector<glm::vec3> vertices
+    {
+        { -0.5f, -0.5f, 0.0f },
+        { 0.5f, 0.5f, 0.0f },
+        { -0.5f, 0.5f, 0.0f },
+        { 0.5f, -0.5f, 0.0f },
+        { 0.5f, 0.5f, 0.0f },
+        { -0.5f, -0.5f, 0.0f }
+    };
+
+    std::vector<glm::vec3> colors
+    {
+        { 1.0f, 0.0f, 0.0f },
+        { 0.0f, 1.0f, 0.0f },
+        { 0.0f, 0.0f, 1.0f },
+        { 1.0f, 1.0f, 0.0f },
+        { 0.0f, 1.0f, 0.0f },
+        { 1.0f, 0.0f, 0.0f }
+    };
+
+    std::vector<glm::vec3> normals
+    {
+        { 0.0f, 0.0f, 1.0f },
+        { 0.0f, 0.0f, 1.0f },
+        { 0.0f, 0.0f, 1.0f },
+        { 0.0f, 0.0f, 1.0f },
+        { 0.0f, 0.0f, 1.0f },
+        { 0.0f, 0.0f, 1.0f }
+    };
+
+    return std::make_shared<Mesh>(vertices, colors, normals);
 }

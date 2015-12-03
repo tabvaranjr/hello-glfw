@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
     auto context = std::make_shared<RenderContext>(parameters);
 
     // Create resources.
-    auto mesh = makeQuad();
+    auto mesh = makeSimpleQuad();
     auto sp = makeShaderProgram("simple");
 
     // Set camera matrices.
