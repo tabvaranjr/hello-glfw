@@ -122,7 +122,7 @@ static void glfwWindowSizeCallback(GLFWwindow* window, int width, int height)
 }
 
 /// Callback when an debug message is sent by OpenGL (with KHR_debug extension/OpenGL 4.3)
-static void glDebugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, void* userParam)
+static void glDebugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const GLvoid* userParam)
 {
     fmt::print(std::cerr, "Error {0:#x}: {1}\n", id, message);
 }

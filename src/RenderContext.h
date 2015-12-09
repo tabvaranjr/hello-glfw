@@ -1,7 +1,6 @@
 #ifndef HELLO_GLFW_RENDERCONTEXT_H
 #define HELLO_GLFW_RENDERCONTEXT_H
 
-#define GLEW_STATIC
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
