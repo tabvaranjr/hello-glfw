@@ -1,8 +1,3 @@
-///
-/// \brief  Main program file
-/// \author Patrick Clément-Bonhomme <patrick.cb@gmail.com>
-///
-
 #include <cstdlib>
 #include <cmath>
 #include <memory>
