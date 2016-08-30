@@ -201,8 +201,7 @@ void RenderContext::makeContext()
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1);
 
-    // Reminder: GLEW requires a valid OpenGL context before initialization.
-    //initializeGlew();
+    // Reminder: GLAD requires a valid OpenGL context before initialization.
     if (!gladLoadGL())
     {
         destroyContext();
