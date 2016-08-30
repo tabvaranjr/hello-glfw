@@ -1,9 +1,9 @@
 #ifndef HELLO_GLFW_MESH_H
 #define HELLO_GLFW_MESH_H
 
+#include "glad/glad.h"
 #include <vector>
 #include <glm/vec3.hpp>
-#include <GL/glew.h>
 
 class Mesh
 {

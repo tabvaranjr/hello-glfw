@@ -201,12 +201,16 @@ void RenderContext::makeContext()
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1);
 
-    // Reminder: GLEW requires a valid OpenGL context before initialization.
-    initializeGlew();
+    // Reminder: GLAD requires a valid OpenGL context before initialization.
+    if (!gladLoadGL())
+    {
+        destroyContext();
+        throw std::runtime_error("Failed to initialize GLAD.");
+    }
 
     if (parameters.IsDebugModeActive)
     {
-        if (GLEW_VERSION_4_3 || GLEW_KHR_debug)
+        if (GLAD_GL_VERSION_4_3 || GLAD_GL_KHR_debug)
         {
             glDebugMessageCallback(glDebugCallback, nullptr);
             glEnable(GL_DEBUG_OUTPUT);
@@ -228,16 +232,16 @@ void RenderContext::makeContext()
     glfwSetWindowSizeCallback(window, glfwWindowSizeCallback);
 }
 
-void RenderContext::initializeGlew()
-{
-    glewExperimental = GL_TRUE;
-    GLenum err = glewInit();
-    if (err != GLEW_OK)
-    {
-        destroyContext();
-        throw std::runtime_error(fmt::format("Failed to initialize GLEW: {0}", glewGetErrorString(err)));
-    }
-}
+// void RenderContext::initializeGlew()
+// {
+//     glewExperimental = GL_TRUE;
+//     GLenum err = glewInit();
+//     if (err != GLEW_OK)
+//     {
+//         destroyContext();
+//         throw std::runtime_error(fmt::format("Failed to initialize GLEW: {0}", glewGetErrorString(err)));
+//     }
+// }
 
 
 /// Destroys the window and the OpenGL context

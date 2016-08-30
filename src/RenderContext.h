@@ -1,7 +1,7 @@
 #ifndef HELLO_GLFW_RENDERCONTEXT_H
 #define HELLO_GLFW_RENDERCONTEXT_H
 
-#include <GL/glew.h>
+#include "glad/glad.h"
 #include <GLFW/glfw3.h>
 
 #include "ApplicationParameters.h"

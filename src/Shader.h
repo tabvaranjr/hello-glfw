@@ -1,7 +1,7 @@
 #ifndef HELLO_GLFW_SHADER_H
 #define HELLO_GLFW_SHADER_H
 
-#include <GL/glew.h>
+#include "glad/glad.h"
 #include <string>
 
 class Shader

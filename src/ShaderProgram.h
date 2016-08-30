@@ -2,7 +2,7 @@
 #define HELLO_GLFW_SHADERPROGRAM_H
 
 #include <string>
-#include <GL/glew.h>
+#include "glad/glad.h"
 
 #include "Shader.h"
 
