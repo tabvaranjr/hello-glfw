@@ -1,13 +1,15 @@
 #include <cstdlib>
 #include <cmath>
 #include <memory>
+#include <chrono>
+#include <thread>
+
 #include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <format.h>
-#include <chrono>
-#include <thread>
+
+#include <fmt/format.h>
 
 #include "ApplicationParameters.h"
 #include "Demo.h"

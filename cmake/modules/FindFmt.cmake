@@ -1,16 +1,16 @@
 #.rst:
-# FindCppFormat
+# FindFMT
 # -------
 #
-# Locate the cppformat C++ formatting library.
+# Locate the fmt/cppformat C++ formatting library.
 #
 # This module defines the following variables:
 #
 # ::
 #
-#   CPPFORMAT_FOUND         - true when the cppformat header and library files are found
-#   CPPFORMAT_LIBRARY       - the cppformat library
-#   CPPFORMAT_INCLUDE_DIR   - path to cppformat include directory (format.h)
+#   FMT_FOUND         - true when the fmt/cppformat header and library files are found
+#   FMT_LIBRARY       - the fmt/cppformat library
+#   FMT_INCLUDE_DIR   - path to fmt/cppformat include directory (format.h)
 
 #=============================================================================
 # Copyright 2015-2016 Patrick Clément-Bonhomme <patrick.cb@gmail.com>
@@ -27,8 +27,6 @@
 
 # Default search directories
 set(_fmt_HEADER_SEARCH_DIRS
-    "/usr/include/fmt/"
-    "/usr/include/cppformat/"
     "/usr/include"
     "/usr/local/include"
 )
@@ -38,13 +36,24 @@ set(_fmt_LIB_SEARCH_DIRS
     "/usr/local/lib"
 )
 
+# Use user spefied location when available as root search directory
+set(_fmt_ENV_ROOT $ENV{FMT_ROOT})
+if(NOT FMT_ROOT AND _fmt_ENV_ROOT)
+    set(FMT_ROOT ${_fmt_ENV_ROOT})
+endif()
+
+if(FMT_ROOT)
+    list(INSERT _fmt_HEADER_SEARCH_DIRS 0 "${FMT_ROOT}/include")
+    list(INSERT _fmt_LIB_SEARCH_DIRS 0 "${FMT_ROOT}/lib")
+endif()
+
 # Search for the header
-find_path(CPPFORMAT_INCLUDE_DIR "format.h" PATHS ${_fmt_HEADER_SEARCH_DIRS})
+find_path(FMT_INCLUDE_DIR "fmt/format.h" PATHS ${_fmt_HEADER_SEARCH_DIRS})
 
 # Search for the library
-find_library(CPPFORMAT_LIBRARY NAMES cppformat format fmt PATHS ${_fmt_LIB_SEARCH_DIRS} )
+find_library(FMT_LIBRARY NAMES fmt cppformat PATHS ${_fmt_LIB_SEARCH_DIRS})
 
 include(FindPackageHandleStandardArgs)
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(CPPFORMAT DEFAULT_MSG CPPFORMAT_INCLUDE_DIR CPPFORMAT_LIBRARY)
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(FMT DEFAULT_MSG FMT_INCLUDE_DIR FMT_LIBRARY)
 
-mark_as_advanced(CPPFORMAT_INCLUDE_DIR CPPFORMAT_LIBRARY)
+mark_as_advanced(FMT_INCLUDE_DIR FMT_LIBRARY)

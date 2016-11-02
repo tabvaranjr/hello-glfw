@@ -32,8 +32,8 @@ find_package(GLM REQUIRED)
 include_directories(${GLM_INCLUDE_DIR})
 
 # cppformat
-find_package(CppFormat REQUIRED)
-include_directories(${CPPFORMAT_INCLUDE_DIR})
+find_package(Fmt REQUIRED)
+include_directories(${FMT_INCLUDE_DIR})
 
 # ----------------------------------------------------------------------------
 # Program

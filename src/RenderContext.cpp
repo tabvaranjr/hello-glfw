@@ -1,8 +1,9 @@
 #include "RenderContext.h"
 
-#include <format.h>
 #include <iostream>
 #include <stdexcept>
+
+#include <fmt/format.h>
 
 /// Callback for errors logged by GLFW
 static void glfwErrorCallback(int error, const char* description)
@@ -124,7 +125,7 @@ static void glfwWindowSizeCallback(GLFWwindow* window, int width, int height)
 /// Callback when an debug message is sent by OpenGL (with KHR_debug extension/OpenGL 4.3)
 static void glDebugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const GLvoid* userParam)
 {
-    fmt::print(std::cerr, "Error {0:#x}: {1}\n", id, message);
+    fmt::print("Error {0:#x}: {1}\n", id, message);
 }
 
 RenderContext::RenderContext(const ApplicationParameters& cliParameters) :
@@ -217,7 +218,7 @@ void RenderContext::makeContext()
         }
         else
         {
-            fmt::print(std::cerr, "Missing KHR_debug extension support for debug output\n");
+            fmt::print("Missing KHR_debug extension support for debug output\n");
         }
     }
 
@@ -232,19 +233,6 @@ void RenderContext::makeContext()
     glfwSetWindowSizeCallback(window, glfwWindowSizeCallback);
 }
 
-// void RenderContext::initializeGlew()
-// {
-//     glewExperimental = GL_TRUE;
-//     GLenum err = glewInit();
-//     if (err != GLEW_OK)
-//     {
-//         destroyContext();
-//         throw std::runtime_error(fmt::format("Failed to initialize GLEW: {0}", glewGetErrorString(err)));
-//     }
-// }
-
-
-/// Destroys the window and the OpenGL context
 void RenderContext::destroyContext()
 {
     glfwDestroyWindow(window);
