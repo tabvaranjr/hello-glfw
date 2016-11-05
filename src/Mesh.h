@@ -2,8 +2,9 @@
 #define HELLO_GLFW_MESH_H
 
 #include "glad/glad.h"
+
 #include <vector>
-#include <glm/vec3.hpp>
+#include <glm/fwd.hpp>
 
 class Mesh
 {

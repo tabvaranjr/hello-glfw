@@ -1,6 +1,7 @@
 #include "Demo.h"
 
 #include <fmt/format.h>
+#include <glm/vec3.hpp>
 
 #include "File.h"
 #include "Shader.h"

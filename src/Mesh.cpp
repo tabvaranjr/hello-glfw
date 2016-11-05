@@ -32,7 +32,7 @@ Mesh::Mesh(const std::vector<glm::vec3>& vertices, const std::vector<glm::vec3>&
     glBindBuffer(GL_ARRAY_BUFFER, vbo[2]);
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 
-    count = vertices.size();
+    count = (GLsizei) vertices.size();
 }
 
 Mesh::~Mesh()
