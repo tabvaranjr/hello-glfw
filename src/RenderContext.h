@@ -27,8 +27,6 @@ private:
 
     void makeContext();
     void destroyContext();
-
-    void initializeGlew();
 };
 
 #endif
