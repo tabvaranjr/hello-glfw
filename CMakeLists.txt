@@ -42,9 +42,8 @@ include_directories(${FMT_INCLUDE_DIR})
 file(GLOB SRC "src/*.cpp")
 file(GLOB HDR "src/*.h")
 
-
 add_executable(hello-glfw ${SRC} ${HDR} ${GLAD})
-target_link_libraries(hello-glfw ${GLFW3_LIBRARY} ${CPPFORMAT_LIBRARY} ${CMAKE_DL_LIBS})
+target_link_libraries(hello-glfw ${GLFW3_LIBRARY} ${FMT_LIBRARY} ${CMAKE_DL_LIBS})
 set_property(TARGET hello-glfw PROPERTY CXX_STANDARD 11)
 set_property(TARGET hello-glfw PROPERTY CXX_STANDARD_REQUIRED ON)
 
@@ -52,4 +51,3 @@ install(TARGETS hello-glfw RUNTIME DESTINATION bin)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/shaders DESTINATION share)
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/shaders DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-
