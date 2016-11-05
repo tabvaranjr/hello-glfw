@@ -4,14 +4,13 @@
 /// Holds the global parameters of the application.
 struct ApplicationParameters
 {
-    ApplicationParameters() :
-        IsDebugModeActive(false),
-        IsFullScreen(false)
-    {
-    }
+    static ApplicationParameters createFromCommandLineArguments(int argc, char** argv);
 
     bool IsDebugModeActive;
     bool IsFullScreen;
+
+private:
+    ApplicationParameters();
 };
 
 #endif
