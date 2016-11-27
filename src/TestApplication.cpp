@@ -9,10 +9,13 @@
 #include <glm/vec3.hpp>
 #include <thread>
 
+#include "ApplicationParameters.h"
 #include "Camera.h"
 #include "File.h"
 #include "Mesh.h"
+#include "Shader.h"
 #include "ShaderProgram.h"
+#include "RenderContext.h"
 
 std::shared_ptr<ShaderProgram> makeShaderProgram(const std::string& program)
 {

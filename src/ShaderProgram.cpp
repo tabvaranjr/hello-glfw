@@ -1,6 +1,5 @@
 #include "ShaderProgram.h"
 
-#include "File.h"
 #include "Shader.h"
 
 ShaderProgram::ShaderProgram(const Shader& vertexShader, const Shader& fragmentShader) :

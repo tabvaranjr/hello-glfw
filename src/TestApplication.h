@@ -1,10 +1,10 @@
 #ifndef HELLO_GLFW_APPLICATION_H
 #define HELLO_GLFW_APPLICATION_H
 
-#include "ApplicationParameters.h"
-#include "RenderContext.h"
-
 #include <memory>
+
+class ApplicationParameters;
+class RenderContext;
 
 class TestApplication
 {

@@ -1,14 +1,13 @@
 #ifndef HELLO_GLFW_RENDERCONTEXT_H
 #define HELLO_GLFW_RENDERCONTEXT_H
 
-#include "ApplicationParameters.h"
-
+class ApplicationParameters;
 class GLFWwindow;
 
 class RenderContext
 {
 public:
-    RenderContext(const ApplicationParameters& cliParameters);
+    RenderContext(const ApplicationParameters& parameters);
     RenderContext(const RenderContext&) = delete;
     ~RenderContext();
 
@@ -22,9 +21,8 @@ public:
 
 private:
     GLFWwindow* window;
-    ApplicationParameters parameters;
 
-    void makeContext();
+    void makeContext(const ApplicationParameters& parameters);
     void destroyContext();
 };
 

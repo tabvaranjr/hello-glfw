@@ -2,16 +2,17 @@
 
 #include "glad/glad.h"
 
+#include <GLFW/glfw3.h>
+#include <fmt/format.h>
 #include <iostream>
 #include <stdexcept>
-#include <fmt/format.h>
-#include <GLFW/glfw3.h>
 
-RenderContext::RenderContext(const ApplicationParameters& cliParameters) :
-    window(nullptr),
-    parameters(cliParameters)
+#include "ApplicationParameters.h"
+
+RenderContext::RenderContext(const ApplicationParameters& parameters) :
+    window(nullptr)
 {
-    makeContext();
+    makeContext(parameters);
 }
 
 RenderContext::~RenderContext()
@@ -35,7 +36,7 @@ bool RenderContext::isCloseRequested()
     return glfwWindowShouldClose(window);
 }
 
-void RenderContext::makeContext()
+void RenderContext::makeContext(const ApplicationParameters& parameters)
 {
     auto glfwErrorCallback = [](int error, const char* description)
     {
