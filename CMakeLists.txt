@@ -51,7 +51,8 @@ set(SOURCE_FILES src/main.cpp
     src/RenderContext.cpp src/RenderContext.h
     src/Shader.cpp src/Shader.h
     src/ShaderProgram.cpp src/ShaderProgram.h
-    src/TestApplication.cpp src/TestApplication.h)
+    src/TestApplication.cpp src/TestApplication.h
+    src/Timer.cpp src/Timer.h)
 
 add_executable(hello-glfw ${SOURCE_FILES} ${GLAD_SRC})
 target_link_libraries(hello-glfw ${GLFW3_LIBRARY} ${FMT_LIBRARY} ${CMAKE_DL_LIBS})

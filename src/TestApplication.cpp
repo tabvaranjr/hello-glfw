@@ -1,6 +1,5 @@
 #include "TestApplication.h"
 
-#include <GLFW/glfw3.h>
 #include <chrono>
 #include <fmt/format.h>
 #include <glm/gtc/matrix_transform.hpp>
@@ -13,9 +12,10 @@
 #include "Camera.h"
 #include "File.h"
 #include "Mesh.h"
+#include "RenderContext.h"
 #include "Shader.h"
 #include "ShaderProgram.h"
-#include "RenderContext.h"
+#include "Timer.h"
 
 std::shared_ptr<ShaderProgram> makeShaderProgram(const std::string& program)
 {
@@ -89,10 +89,11 @@ void TestApplication::run()
     cam->setPerspectiveProjection(90, 1, 0.1, 10.0);
     cam->setView(glm::lookAt(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
 
+    Timer timer;
 
     while (true)
     {
-        auto time = static_cast<float>(glfwGetTime());
+        auto time = static_cast<float>(timer.getTime());
 
         // Handle user input.
         if (context->isCloseRequested())
