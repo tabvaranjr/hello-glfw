@@ -24,14 +24,14 @@ add_definitions("-DGLFW_INCLUDE_NONE")
 # GLAD
 set(GLAD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/glad)
 set(GLAD_INCLUDE_DIR ${GLAD_DIR}/include)
-set(GLAD ${GLAD_INCLUDE_DIR}/glad/glad.h ${GLAD_DIR}/src/glad.c)
+set(GLAD_SRC ${GLAD_INCLUDE_DIR}/glad/glad.h ${GLAD_DIR}/src/glad.c)
 include_directories(${GLAD_INCLUDE_DIR})
 
 # GLM
 find_package(GLM REQUIRED)
 include_directories(${GLM_INCLUDE_DIR})
 
-# cppformat
+# fmt/cppformat
 find_package(Fmt REQUIRED)
 include_directories(${FMT_INCLUDE_DIR})
 
@@ -39,13 +39,23 @@ include_directories(${FMT_INCLUDE_DIR})
 # Program
 # ----------------------------------------------------------------------------
 
-file(GLOB SRC "src/*.cpp")
-file(GLOB HDR "src/*.h")
+# C++11 is a requirement for the whole project
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED YES)
 
-add_executable(hello-glfw ${SRC} ${HDR} ${GLAD})
+set(SOURCE_FILES src/ApplicationParameters.cpp src/ApplicationParameters.h
+                 src/Camera.cpp src/Camera.h
+                 src/Demo.cpp src/Demo.h
+                 src/File.cpp src/File.h
+                 src/Mesh.cpp src/Mesh.h
+                 src/RenderContext.cpp src/RenderContext.h
+                 src/Shader.cpp src/Shader.h
+                 src/ShaderProgram.cpp src/ShaderProgram.h
+                 src/TestApplication.cpp src/TestApplication.h
+                 src/main.cpp)
+
+add_executable(hello-glfw ${SOURCE_FILES} ${GLAD_SRC})
 target_link_libraries(hello-glfw ${GLFW3_LIBRARY} ${FMT_LIBRARY} ${CMAKE_DL_LIBS})
-set_property(TARGET hello-glfw PROPERTY CXX_STANDARD 11)
-set_property(TARGET hello-glfw PROPERTY CXX_STANDARD_REQUIRED ON)
 
 install(TARGETS hello-glfw RUNTIME DESTINATION bin)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/shaders DESTINATION share)
