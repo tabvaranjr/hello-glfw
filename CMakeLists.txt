@@ -43,16 +43,15 @@ include_directories(${FMT_INCLUDE_DIR})
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 
-set(SOURCE_FILES src/ApplicationParameters.cpp src/ApplicationParameters.h
-                 src/Camera.cpp src/Camera.h
-                 src/Demo.cpp src/Demo.h
-                 src/File.cpp src/File.h
-                 src/Mesh.cpp src/Mesh.h
-                 src/RenderContext.cpp src/RenderContext.h
-                 src/Shader.cpp src/Shader.h
-                 src/ShaderProgram.cpp src/ShaderProgram.h
-                 src/TestApplication.cpp src/TestApplication.h
-                 src/main.cpp)
+set(SOURCE_FILES src/main.cpp
+    src/ApplicationParameters.cpp src/ApplicationParameters.h
+    src/Camera.cpp src/Camera.h
+    src/File.cpp src/File.h
+    src/Mesh.cpp src/Mesh.h
+    src/RenderContext.cpp src/RenderContext.h
+    src/Shader.cpp src/Shader.h
+    src/ShaderProgram.cpp src/ShaderProgram.h
+    src/TestApplication.cpp src/TestApplication.h)
 
 add_executable(hello-glfw ${SOURCE_FILES} ${GLAD_SRC})
 target_link_libraries(hello-glfw ${GLFW3_LIBRARY} ${FMT_LIBRARY} ${CMAKE_DL_LIBS})
