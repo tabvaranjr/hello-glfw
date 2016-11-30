@@ -8,7 +8,7 @@
 #include <glm/vec3.hpp>
 #include <thread>
 
-#include "ApplicationParameters.h"
+#include "Parameters.h"
 #include "Camera.h"
 #include "File.h"
 #include "Mesh.h"
@@ -66,7 +66,7 @@ std::shared_ptr<Mesh> makeSimpleQuad()
     return std::make_shared<Mesh>(vertices, colors, normals);
 }
 
-TestApplication::TestApplication(const ApplicationParameters& parameters)
+TestApplication::TestApplication(const Parameters& parameters)
 {
     context = std::make_shared<RenderContext>(parameters);
 }

@@ -3,13 +3,13 @@
 
 #include <memory>
 
-class ApplicationParameters;
+class Parameters;
 class RenderContext;
 
 class TestApplication
 {
 public:
-    TestApplication(const ApplicationParameters& parameters);
+    TestApplication(const Parameters& parameters);
     virtual ~TestApplication();
 
     void run();

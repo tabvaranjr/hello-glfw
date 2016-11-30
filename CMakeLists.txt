@@ -31,20 +31,29 @@ include_directories(${GLAD_INCLUDE_DIR})
 find_package(GLM REQUIRED)
 include_directories(${GLM_INCLUDE_DIR})
 
-# fmt/cppformat
+# fmt
 find_package(Fmt REQUIRED)
 include_directories(${FMT_INCLUDE_DIR})
+
+# Lua
+find_package(Lua REQUIRED)
+include_directories(${LUA_INCLUDE_DIR})
+
+# sol2 (Lua wrapper)
+set(SOL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/sol2)
+set(SOL_INCLUDE_DIR ${SOL_DIR})
+include_directories(${SOL_INCLUDE_DIR})
 
 # ----------------------------------------------------------------------------
 # Program
 # ----------------------------------------------------------------------------
 
-# C++11 is a requirement for the whole project
-set(CMAKE_CXX_STANDARD 11)
+# C++14 is a requirement for the whole project
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 
 set(SOURCE_FILES src/main.cpp
-    src/ApplicationParameters.cpp src/ApplicationParameters.h
+    src/Parameters.cpp src/Parameters.h
     src/Camera.cpp src/Camera.h
     src/File.cpp src/File.h
     src/Mesh.cpp src/Mesh.h
@@ -52,12 +61,14 @@ set(SOURCE_FILES src/main.cpp
     src/Shader.cpp src/Shader.h
     src/ShaderProgram.cpp src/ShaderProgram.h
     src/TestApplication.cpp src/TestApplication.h
-    src/Timer.cpp src/Timer.h)
+    src/Timer.cpp src/Timer.h
+    src/LuaBindings.cpp src/LuaBindings.h)
 
 add_executable(hello-glfw ${SOURCE_FILES} ${GLAD_SRC})
-target_link_libraries(hello-glfw ${GLFW3_LIBRARY} ${FMT_LIBRARY} ${CMAKE_DL_LIBS})
+target_link_libraries(hello-glfw ${GLFW3_LIBRARY} ${FMT_LIBRARY} ${LUA_LIBRARY} ${CMAKE_DL_LIBS})
 
 install(TARGETS hello-glfw RUNTIME DESTINATION bin)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/shaders DESTINATION share)
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/shaders DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/config.lua DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

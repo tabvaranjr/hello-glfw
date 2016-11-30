@@ -7,9 +7,9 @@
 #include <iostream>
 #include <stdexcept>
 
-#include "ApplicationParameters.h"
+#include "Parameters.h"
 
-RenderContext::RenderContext(const ApplicationParameters& parameters) :
+RenderContext::RenderContext(const Parameters& parameters) :
     window(nullptr)
 {
     makeContext(parameters);
@@ -36,7 +36,7 @@ bool RenderContext::isCloseRequested()
     return glfwWindowShouldClose(window);
 }
 
-void RenderContext::makeContext(const ApplicationParameters& parameters)
+void RenderContext::makeContext(const Parameters& parameters)
 {
     auto glfwErrorCallback = [](int error, const char* description)
     {
