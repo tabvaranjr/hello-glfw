@@ -48,7 +48,8 @@ include_directories(${SOL_INCLUDE_DIR})
 # Program
 # ----------------------------------------------------------------------------
 
-# C++14 is a requirement for the whole project
+# C++14 is a requirement for the whole project due to sol2
+# This isn't a bad thing, mind you.
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 
