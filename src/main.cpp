@@ -1,7 +1,5 @@
 #include "CommandLineArguments.h"
 #include "LuaBindings.h"
-#include "Parameters.h"
-#include "TestApplication.h"
 #include "sol.hpp"
 
 #include <fmt/format.h>
@@ -23,9 +21,13 @@ int main(int argc, char* argv[])
         }
         else
         {
-            auto parameters = Parameters();
-            TestApplication app(parameters);
-            app.run();
+            std::string script(R"(
+                config = Parameters.new()
+                app = TestApplication.new(config)
+                app:run()
+            )");
+
+            lua.script(script);
         }
 
         return 0;
