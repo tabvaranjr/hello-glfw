@@ -2,9 +2,11 @@
 #define HELLO_GLFW_SHADER_H
 
 #include "glad/glad.h"
+#include "ObjectInterface.h"
+
 #include <string>
 
-class Shader
+class Shader : public ObjectInterface
 {
 public:
     enum class Type : GLenum
@@ -16,11 +18,6 @@ public:
 
     Shader(Type type, const std::string& source);
     ~Shader();
-
-    GLuint getId() const { return id; }
-
-private:
-    GLuint id;
 };
 
 #endif

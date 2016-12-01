@@ -2,8 +2,7 @@
 
 #include "Shader.h"
 
-ShaderProgram::ShaderProgram(const Shader& vertexShader, const Shader& fragmentShader) :
-    id(0)
+ShaderProgram::ShaderProgram(const Shader& vertexShader, const Shader& fragmentShader)
 {
     id = glCreateProgram();
     glAttachShader(id, vertexShader.getId());
@@ -17,8 +16,7 @@ ShaderProgram::ShaderProgram(const Shader& vertexShader, const Shader& fragmentS
     glDetachShader(id, fragmentShader.getId());
 }
 
-ShaderProgram::ShaderProgram(const Shader& vertexShader, const Shader& geometryShader, const Shader& fragmentShader) :
-    id(0)
+ShaderProgram::ShaderProgram(const Shader& vertexShader, const Shader& geometryShader, const Shader& fragmentShader)
 {
     id = glCreateProgram();
     glAttachShader(id, vertexShader.getId());
@@ -32,7 +30,6 @@ ShaderProgram::ShaderProgram(const Shader& vertexShader, const Shader& geometryS
     glDetachShader(id, vertexShader.getId());
     glDetachShader(id, geometryShader.getId());
     glDetachShader(id, fragmentShader.getId());
-
 }
 
 ShaderProgram::~ShaderProgram()

@@ -64,7 +64,8 @@ set(SOURCE_FILES src/main.cpp
     src/TestApplication.cpp src/TestApplication.h
     src/Timer.cpp src/Timer.h
     src/LuaBindings.cpp src/LuaBindings.h
-    src/CommandLineArguments.cpp src/CommandLineArguments.h)
+    src/CommandLineArguments.cpp src/CommandLineArguments.h
+    src/ObjectInterface.h)
 
 add_executable(hello-glfw ${SOURCE_FILES} ${GLAD_SRC})
 target_link_libraries(hello-glfw ${GLFW3_LIBRARY} ${FMT_LIBRARY} ${LUA_LIBRARY} ${CMAKE_DL_LIBS})

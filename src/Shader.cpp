@@ -2,8 +2,7 @@
 
 #include <stdexcept>
 
-Shader::Shader(Type type, const std::string& source) :
-    id(0)
+Shader::Shader(Type type, const std::string& source)
 {
     id = glCreateShader(static_cast<GLenum>(type));
 
