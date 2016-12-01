@@ -9,14 +9,18 @@
 
 #include "Parameters.h"
 
+GLFWwindow* makeContext(const Parameters& parameters);
+void destroyContext();
+
 RenderContext::RenderContext(const Parameters& parameters) :
     window(nullptr)
 {
-    makeContext(parameters);
+    window = makeContext(parameters);
 }
 
 RenderContext::~RenderContext()
 {
+    glfwDestroyWindow(window);
     destroyContext();
 }
 
@@ -36,7 +40,7 @@ bool RenderContext::isCloseRequested()
     return glfwWindowShouldClose(window);
 }
 
-void RenderContext::makeContext(const Parameters& parameters)
+GLFWwindow* makeContext(const Parameters& parameters)
 {
     auto glfwErrorCallback = [](int error, const char* description)
     {
@@ -60,7 +64,7 @@ void RenderContext::makeContext(const Parameters& parameters)
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    window = nullptr;
+    GLFWwindow* window = nullptr;
     if (parameters.IsFullScreen)
     {
         auto monitor = glfwGetPrimaryMonitor();
@@ -234,8 +238,7 @@ void RenderContext::makeContext(const Parameters& parameters)
     glfwSetWindowSizeCallback(window, glfwWindowSizeCallback);
 }
 
-void RenderContext::destroyContext()
+void destroyContext()
 {
-    glfwDestroyWindow(window);
     glfwTerminate();
 }

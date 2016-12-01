@@ -21,9 +21,6 @@ public:
 
 private:
     GLFWwindow* window;
-
-    void makeContext(const Parameters& parameters);
-    void destroyContext();
 };
 
 #endif
