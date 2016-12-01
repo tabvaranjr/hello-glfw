@@ -1,11 +1,10 @@
-//
-// Created by pclement on 16-11-29.
-//
-
 #include "LuaBindings.h"
 
 #include "sol.hpp"
+
 #include "Parameters.h"
+#include "Timer.h"
+#include "TestApplication.h"
 
 void LuaBindings::generate(sol::state& lua)
 {
@@ -14,5 +13,18 @@ void LuaBindings::generate(sol::state& lua)
             sol::constructors<sol::types<>>(),
             "fullscreen", &Parameters::IsFullScreen,
             "debug", &Parameters::IsDebugModeActive
+    );
+
+    lua.new_usertype<Timer>(
+            "Timer",
+            sol::constructors<sol::types<>>(),
+            "reset", &Timer::reset,
+            "getTime", &Timer::getTime
+    );
+
+    lua.new_usertype<TestApplication>(
+            "TestApplication",
+            sol::constructors<sol::types<Parameters>>(),
+            "run", &TestApplication::run
     );
 }

@@ -9,32 +9,30 @@
 
 int main(int argc, char* argv[])
 {
+    sol::state lua;
+    lua.open_libraries(sol::lib::base);
+    LuaBindings::generate(lua);
+
     try
     {
         auto arguments = CommandLineArguments::parse(argc, argv);
 
-        sol::state lua;
-        lua.open_libraries(sol::lib::base);
-        LuaBindings::generate(lua);
-
-        auto parameters = Parameters();
-        if (!arguments.configFile.empty())
+        if (!arguments.scriptFile.empty())
         {
-            lua.script_file(arguments.configFile);
-            parameters.IsFullScreen = lua["config"]["fullscreen"].get_or(false);
-            parameters.IsDebugModeActive = lua["config"]["debug"].get_or(false);
+            lua.script_file(arguments.scriptFile);
+        }
+        else
+        {
+            auto parameters = Parameters();
+            TestApplication app(parameters);
+            app.run();
         }
 
-        TestApplication app(parameters);
-
-        app.run();
-
         return 0;
-
     }
     catch (std::exception& e)
     {
-        fmt::print("{0}\n", e.what());
+        fmt::print("(┛◉Д◉)┛彡┻━┻: {0}\n", e.what());
 
         return 1;
     }

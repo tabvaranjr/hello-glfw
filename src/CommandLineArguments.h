@@ -7,7 +7,7 @@ struct CommandLineArguments
 {
     static CommandLineArguments parse(int argc, char* argv[]);
 
-    std::string configFile;
+    std::string scriptFile;
 };
 
 #endif //HELLO_GLFW_COMMANDLINEARGUMENTS_H
