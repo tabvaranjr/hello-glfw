@@ -10,7 +10,7 @@ CommandLineArguments CommandLineArguments::parse(int argc, char* argv[])
     {
         if (argc == 2)
         {
-            args.configFile = *argv[1];
+            args.configFile = argv[1];
         }
         else
         {
