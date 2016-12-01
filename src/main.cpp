@@ -1,27 +1,41 @@
-#include "TestApplication.h"
-#include "Parameters.h"
-
-#include <iostream>
-#include <string>
-
-#include "sol.hpp"
+#include "CommandLineArguments.h"
 #include "LuaBindings.h"
+#include "Parameters.h"
+#include "TestApplication.h"
+#include "sol.hpp"
+
+#include <fmt/format.h>
+#include <stdexcept>
 
 int main(int argc, char* argv[])
 {
-    sol::state lua;
-    lua.open_libraries(sol::lib::base);
+    try
+    {
+        auto arguments = CommandLineArguments::parse(argc, argv);
 
-    LuaBindings::generate(lua);
+        sol::state lua;
+        lua.open_libraries(sol::lib::base);
+        LuaBindings::generate(lua);
 
-    lua.script_file("config.lua");
-    auto parameters = Parameters();
-    parameters.IsFullScreen = lua["config"]["fullscreen"].get_or(false);
-    parameters.IsDebugModeActive = lua["config"]["debug"].get_or(false);
+        auto parameters = Parameters();
+        if (!arguments.configFile.empty())
+        {
+            lua.script_file(arguments.configFile);
+            parameters.IsFullScreen = lua["config"]["fullscreen"].get_or(false);
+            parameters.IsDebugModeActive = lua["config"]["debug"].get_or(false);
+        }
 
-    TestApplication app(parameters);
+        TestApplication app(parameters);
 
-    app.run();
+        app.run();
 
-    return 0;
+        return 0;
+
+    }
+    catch (std::exception& e)
+    {
+        fmt::print("{0}\n", e.what());
+
+        return 1;
+    }
 }
