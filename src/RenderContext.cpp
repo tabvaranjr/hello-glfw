@@ -236,6 +236,8 @@ GLFWwindow* makeContext(const Parameters& parameters)
     glfwSetMouseButtonCallback(window, glfwMouseButtonCallback);
     glfwSetWindowIconifyCallback(window, glfwWindowIconifyCallback);
     glfwSetWindowSizeCallback(window, glfwWindowSizeCallback);
+
+    return window;
 }
 
 void destroyContext()
