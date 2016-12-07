@@ -1,23 +1,31 @@
 #ifndef HELLO_GLFW_RENDERCONTEXT_H
 #define HELLO_GLFW_RENDERCONTEXT_H
 
+#include <iostream>
+
 class Parameters;
 class GLFWwindow;
 
-class RenderContext
+class RenderContext final
 {
 public:
-    RenderContext(const Parameters& parameters);
+    RenderContext();
+
+    explicit RenderContext(const Parameters& parameters);
+
     RenderContext(const RenderContext&) = delete;
+
     ~RenderContext();
 
     RenderContext& operator=(const RenderContext&) = delete;
 
     void swapBuffers();
 
-    void poolEvents();
+    void poolEvents() const;
 
-    bool isCloseRequested();
+    bool isCloseRequested() const;
+
+    void printContextInformation() const;
 
 private:
     GLFWwindow* window;

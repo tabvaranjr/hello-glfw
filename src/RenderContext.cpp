@@ -10,10 +10,17 @@
 #include "Parameters.h"
 
 GLFWwindow* makeContext(const Parameters& parameters);
+
 void destroyContext();
 
+RenderContext::RenderContext() :
+        window(nullptr)
+{
+    window = makeContext(Parameters());
+}
+
 RenderContext::RenderContext(const Parameters& parameters) :
-    window(nullptr)
+        RenderContext()
 {
     window = makeContext(parameters);
 }
@@ -27,17 +34,23 @@ RenderContext::~RenderContext()
 void RenderContext::swapBuffers()
 {
     glfwSwapBuffers(window);
-
 }
 
-void RenderContext::poolEvents()
+void RenderContext::poolEvents() const
 {
     glfwPollEvents();
 }
 
-bool RenderContext::isCloseRequested()
+bool RenderContext::isCloseRequested() const
 {
     return glfwWindowShouldClose(window);
+}
+
+void RenderContext::printContextInformation() const
+{
+    fmt::print("Vendor: {0}\n", glGetString(GL_VENDOR));
+    fmt::print("Renderer: {0}\n", glGetString(GL_RENDERER));
+    fmt::print("Version: {0}\n", glGetString(GL_VERSION));
 }
 
 GLFWwindow* makeContext(const Parameters& parameters)
@@ -102,7 +115,8 @@ GLFWwindow* makeContext(const Parameters& parameters)
     {
         if (GLAD_GL_VERSION_4_3 || GLAD_GL_KHR_debug)
         {
-            auto glDebugCallback = [](GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const GLvoid* userParam)
+            auto glDebugCallback = [](GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length,
+                                      const GLchar* message, const GLvoid* userParam)
             {
                 fmt::print("Error {0:#x}: {1}\n", id, message);
             };
@@ -115,10 +129,6 @@ GLFWwindow* makeContext(const Parameters& parameters)
             fmt::print("Missing KHR_debug extension support for debug output\n");
         }
     }
-
-    fmt::print("Vendor: {0}\n", glGetString(GL_VENDOR));
-    fmt::print("Renderer: {0}\n", glGetString(GL_RENDERER));
-    fmt::print("Version: {0}\n", glGetString(GL_VERSION));
 
     // Set callbacks for feedback.
     // Callback for keys logged by GLFW

@@ -21,10 +21,4 @@ void LuaBindings::generate(sol::state& lua)
             "reset", &Timer::reset,
             "getTime", &Timer::getTime
     );
-
-    lua.new_usertype<TestApplication>(
-            "TestApplication",
-            sol::constructors<sol::types<Parameters>>(),
-            "run", &TestApplication::run
-    );
 }

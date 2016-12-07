@@ -1,33 +1,68 @@
 #include "CommandLineArguments.h"
+#include "Console.h"
 #include "LuaBindings.h"
+#include "RenderContext.h"
+#include "Timer.h"
 #include "sol.hpp"
+#include "TestApplication.h"
 
 #include <fmt/format.h>
 #include <stdexcept>
 
+
 int main(int argc, char* argv[])
 {
-    sol::state lua;
-    lua.open_libraries(sol::lib::base);
-    LuaBindings::generate(lua);
-
     try
     {
+        sol::state lua;
+        lua.open_libraries(sol::lib::base);
+        LuaBindings::generate(lua);
+
+        RenderContext context;
+        Console console;
+        Timer mainclock;
+
         auto arguments = CommandLineArguments::parse(argc, argv);
 
-        if (!arguments.scriptFile.empty())
-        {
-            lua.script_file(arguments.scriptFile);
-        }
-        else
-        {
-            std::string script(R"(
-                config = Parameters.new()
-                app = TestApplication.new(config)
-                app:run()
-            )");
+        TestApplication test;
 
-            lua.script(script);
+        // Main loop.
+        while (true)
+        {
+            auto time = mainclock.getTime();
+
+            // Process input.
+            if (console.hasInputAvailable())
+            {
+                std::string command = console.getNextInputLine();
+
+                try
+                {
+                    lua.script(command);
+                }
+                catch (sol::error& e)
+                {
+                    fmt::print("щ（ﾟДﾟщ）: {0}\n", e.what());
+                }
+            }
+
+            test.processInput();
+
+            context.poolEvents();
+            if (context.isCloseRequested())
+            {
+                break;
+            }
+
+            // Update.
+            test.update(time);
+
+            // Render.
+            test.render();
+            context.swapBuffers();
+
+            // Take a well-deserved nap...
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
         }
 
         return 0;

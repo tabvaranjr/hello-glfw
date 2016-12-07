@@ -1,12 +1,10 @@
 #include "TestApplication.h"
 
-#include <chrono>
 #include <fmt/format.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
-#include <thread>
 
 #include "Parameters.h"
 #include "Camera.h"
@@ -15,7 +13,6 @@
 #include "RenderContext.h"
 #include "Shader.h"
 #include "ShaderProgram.h"
-#include "Timer.h"
 
 std::shared_ptr<ShaderProgram> makeShaderProgram(const std::string& program)
 {
@@ -66,63 +63,46 @@ std::shared_ptr<Mesh> makeSimpleQuad()
     return std::make_shared<Mesh>(vertices, colors, normals);
 }
 
-TestApplication::TestApplication(const Parameters& parameters)
-{
-    context = std::make_shared<RenderContext>(parameters);
-}
-
-TestApplication::~TestApplication()
-{
-    context.reset();
-}
-
-void TestApplication::run()
+TestApplication::TestApplication()
 {
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.05f, 0.05f, 0.05f, 1.0);
 
     // Create resources.
-    auto mesh = makeSimpleQuad();
-    auto sp = makeShaderProgram("simple");
+    mesh = makeSimpleQuad();
+    shader = makeShaderProgram("simple");
 
-    auto cam = std::make_shared<Camera>();
-    cam->setPerspectiveProjection(90, 1, 0.1, 10.0);
-    cam->setView(glm::lookAt(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
+    camera.reset(new Camera);
+    camera->setPerspectiveProjection(90, 1, 0.1, 10.0);
+    camera->setView(glm::lookAt(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
+}
 
-    Timer timer;
+TestApplication::~TestApplication()
+{
+}
 
-    while (true)
-    {
-        auto time = static_cast<float>(timer.getTime());
+void TestApplication::processInput()
+{
+}
 
-        // Handle user input.
-        if (context->isCloseRequested())
-        {
-            break;
-        }
+void TestApplication::update(double time)
+{
+    model = glm::rotate(glm::mat4x4(1.0), static_cast<float>(time), glm::vec3(0, 0, 1));
+}
 
-        // Update.
-        auto model = glm::rotate(glm::mat4x4(1.0), time, glm::vec3(0, 0, 1));
+void TestApplication::render()
+{
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // Render.
+    glUseProgram(shader->getId());
+    auto model_location = glGetUniformLocation(shader->getId(), "model");
+    glUniformMatrix4fv(model_location, 1, GL_FALSE, glm::value_ptr(model));
 
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    auto view_location = glGetUniformLocation(shader->getId(), "view");
+    glUniformMatrix4fv(view_location, 1, GL_FALSE, glm::value_ptr(camera->getView()));
 
-        glUseProgram(sp->getId());
-        auto model_location = glGetUniformLocation(sp->getId(), "model");
-        glUniformMatrix4fv(model_location, 1, GL_FALSE, glm::value_ptr(model));
+    auto proj_location = glGetUniformLocation(shader->getId(), "proj");
+    glUniformMatrix4fv(proj_location, 1, GL_FALSE, glm::value_ptr(camera->getProjection()));
 
-        auto view_location = glGetUniformLocation(sp->getId(), "view");
-        glUniformMatrix4fv(view_location, 1, GL_FALSE, glm::value_ptr(cam->getView()));
-
-        auto proj_location = glGetUniformLocation(sp->getId(), "proj");
-        glUniformMatrix4fv(proj_location, 1, GL_FALSE, glm::value_ptr(cam->getProjection()));
-
-        mesh->Draw();
-
-        context->swapBuffers();
-        context->poolEvents();
-
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));
-    }
+    mesh->Draw();
 }

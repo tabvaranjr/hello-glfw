@@ -2,20 +2,27 @@
 #define HELLO_GLFW_APPLICATION_H
 
 #include <memory>
+#include <glm/mat4x4.hpp>
 
-class Parameters;
-class RenderContext;
+class Camera;
+class Mesh;
+class ShaderProgram;
 
-class TestApplication
+class TestApplication final
 {
 public:
-    TestApplication(const Parameters& parameters);
-    virtual ~TestApplication();
+    TestApplication();
+    ~TestApplication();
 
-    void run();
+    void processInput();
+    void update(double time);
+    void render();
 
 private:
-    std::shared_ptr<RenderContext> context;
+    glm::mat4x4 model;
+    std::shared_ptr<Camera> camera;
+    std::shared_ptr<Mesh> mesh;
+    std::shared_ptr<ShaderProgram> shader;
 };
 
 
