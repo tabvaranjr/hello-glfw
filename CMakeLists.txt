@@ -44,6 +44,9 @@ set(SOL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/sol2)
 set(SOL_INCLUDE_DIR ${SOL_DIR})
 include_directories(${SOL_INCLUDE_DIR})
 
+# Any local threading library
+find_package(Threads REQUIRED)
+
 # ----------------------------------------------------------------------------
 # Program
 # ----------------------------------------------------------------------------
@@ -54,6 +57,7 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 
 set(SOURCE_FILES src/main.cpp
+    src/Console.cpp src/Console.h
     src/Parameters.cpp src/Parameters.h
     src/Camera.cpp src/Camera.h
     src/File.cpp src/File.h
@@ -65,10 +69,11 @@ set(SOURCE_FILES src/main.cpp
     src/Timer.cpp src/Timer.h
     src/LuaBindings.cpp src/LuaBindings.h
     src/CommandLineArguments.cpp src/CommandLineArguments.h
-    src/ObjectInterface.h)
+    src/ObjectInterface.h
+    )
 
 add_executable(hello-glfw ${SOURCE_FILES} ${GLAD_SRC})
-target_link_libraries(hello-glfw ${GLFW3_LIBRARY} ${FMT_LIBRARY} ${LUA_LIBRARY} ${CMAKE_DL_LIBS})
+target_link_libraries(hello-glfw ${GLFW3_LIBRARY} ${FMT_LIBRARY} ${LUA_LIBRARY} Threads::Threads ${CMAKE_DL_LIBS})
 
 install(TARGETS hello-glfw RUNTIME DESTINATION bin)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/shaders DESTINATION share)
