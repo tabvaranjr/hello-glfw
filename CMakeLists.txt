@@ -67,7 +67,6 @@ set(SOURCE_FILES src/main.cpp
     src/ShaderProgram.cpp src/ShaderProgram.h
     src/TestApplication.cpp src/TestApplication.h
     src/Timer.cpp src/Timer.h
-    src/LuaBindings.cpp src/LuaBindings.h
     src/CommandLineArguments.cpp src/CommandLineArguments.h
     src/ObjectInterface.h
     )

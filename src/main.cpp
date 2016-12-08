@@ -1,6 +1,5 @@
 #include "CommandLineArguments.h"
 #include "Console.h"
-#include "LuaBindings.h"
 #include "RenderContext.h"
 #include "Timer.h"
 #include "sol.hpp"
@@ -16,7 +15,6 @@ int main(int argc, char* argv[])
     {
         sol::state lua;
         lua.open_libraries(sol::lib::base);
-        LuaBindings::generate(lua);
 
         RenderContext context;
         Console console;
