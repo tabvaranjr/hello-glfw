@@ -8,11 +8,14 @@
 #include <fmt/format.h>
 #include <stdexcept>
 
+const double MaxSecondsPerFrame = 1.0 / 60.0;
 
 int main(int argc, char* argv[])
 {
     try
     {
+        auto arguments = CommandLineArguments::parse(argc, argv);
+
         sol::state lua;
         lua.open_libraries(sol::lib::base);
 
@@ -20,14 +23,13 @@ int main(int argc, char* argv[])
         Console console;
         Timer mainclock;
 
-        auto arguments = CommandLineArguments::parse(argc, argv);
-
         TestApplication test;
 
         // Main loop.
+        auto lastTime = mainclock.getTime();
         while (true)
         {
-            auto time = mainclock.getTime();
+            auto currentTime = mainclock.getTime();
 
             // Process input.
             if (console.hasInputAvailable())
@@ -53,14 +55,19 @@ int main(int argc, char* argv[])
             }
 
             // Update.
-            test.update(time);
+            test.update(currentTime);
 
             // Render.
             test.render();
             context.swapBuffers();
 
-            // Take a well-deserved nap...
-            std::this_thread::sleep_for(std::chrono::milliseconds(10));
+            // Take a nap... when well-deserved.
+            lastTime = mainclock.getTime();
+            double elapsedTime = lastTime - currentTime;
+            if (elapsedTime < MaxSecondsPerFrame)
+            {
+                std::this_thread::sleep_for(std::chrono::duration<double>(MaxSecondsPerFrame - elapsedTime));
+            }
         }
 
         return 0;
