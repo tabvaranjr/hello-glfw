@@ -2,7 +2,6 @@
 #include "Console.h"
 #include "RenderContext.h"
 #include "Timer.h"
-#include "sol.hpp"
 #include "TestApplication.h"
 
 #include <fmt/format.h>
@@ -16,11 +15,7 @@ int main(int argc, char* argv[])
     {
         auto arguments = CommandLineArguments::parse(argc, argv);
 
-        sol::state lua;
-        lua.open_libraries(sol::lib::base);
-
         RenderContext context;
-        Console console;
         Timer mainclock;
 
         TestApplication test;
@@ -32,20 +27,6 @@ int main(int argc, char* argv[])
             auto currentTime = mainclock.getTime();
 
             // Process input.
-            if (console.hasInputAvailable())
-            {
-                std::string command = console.getNextInputLine();
-
-                try
-                {
-                    lua.script(command);
-                }
-                catch (sol::error& e)
-                {
-                    fmt::print("щ（ﾟДﾟщ）: {0}\n", e.what());
-                }
-            }
-
             test.processInput();
 
             context.poolEvents();
