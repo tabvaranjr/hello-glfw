@@ -35,15 +35,6 @@ include_directories(${GLM_INCLUDE_DIR})
 find_package(Fmt REQUIRED)
 include_directories(${FMT_INCLUDE_DIR})
 
-# Lua
-find_package(Lua REQUIRED)
-include_directories(${LUA_INCLUDE_DIR})
-
-# sol2 (Lua wrapper)
-set(SOL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/sol2)
-set(SOL_INCLUDE_DIR ${SOL_DIR})
-include_directories(${SOL_INCLUDE_DIR})
-
 # Any local threading library
 find_package(Threads REQUIRED)
 
